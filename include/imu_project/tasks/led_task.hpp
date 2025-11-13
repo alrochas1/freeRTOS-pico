@@ -1,11 +1,14 @@
 // led_task.hpp
 #pragma once
-#include "task_wrapper.hpp"
 #include "pico/stdlib.h"
+
+#include "task_wrapper.hpp"
+#include <imu_project/config/project_config.hpp>
+
 
 class LedTask : public Task {
 private:
-    uint led_pin;
+    uint8_t led_pin;
     bool state = false;
     
 protected:
@@ -21,5 +24,5 @@ protected:
     }
     
 public:
-    LedTask() : Task("LED", 256, 1), led_pin(PICO_DEFAULT_LED_PIN) {}
+    LedTask() : Task("LED", config::LED_TASK_STACK_SIZE, config::LED_TASK_PRIORITY), led_pin(PICO_DEFAULT_LED_PIN) {}
 }; 
