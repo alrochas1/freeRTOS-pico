@@ -11,7 +11,7 @@ LedTask::LedTask()
     : Task("LED", tasks::LED_STACK_SIZE, tasks::LED_PRIORITY)
     , led_pin(pins::LED) {
     
-    printf("LED Task created (pin: %d)\n", led_pin);
+    printf("[LED] Task created (pin: %d)\n", led_pin);
 }
 
 void LedTask::run() {

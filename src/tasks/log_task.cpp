@@ -11,7 +11,7 @@ LogTask::LogTask(QueueHandle_t gyro_queue)
     : Task("LOG", tasks::LOG_STACK_SIZE, tasks::LOG_PRIORITY)
     , gyro_queue_(gyro_queue) {
     
-    printf("LOG Task created \n");
+    printf("[LOG] Task created \n");
 }
 
 void LogTask::run() {

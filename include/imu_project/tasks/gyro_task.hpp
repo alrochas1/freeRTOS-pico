@@ -15,8 +15,6 @@ class GyroTask : public Task {
 private:
     L3GD20 gyro_;
     QueueHandle_t data_queue_;
-    uint32_t error_count_{0};
-    uint32_t success_count_{0};
     
     bool initialize_gyro();
     void process_gyro_data();
