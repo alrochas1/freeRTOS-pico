@@ -9,9 +9,10 @@ using namespace config;
 
 GyroTask::GyroTask(QueueHandle_t data_queue) 
     : Task("GYRO", tasks::GYRO_STACK_SIZE, tasks::GYRO_PRIORITY)
+    , gyro_(i2c1)
     , data_queue_(data_queue) {
     
-    printf("Gyro Task created\n");
+    printf("[GYRO] Task created. I2C device address: 0x%02X on port %p\n", gyro_.get_address(), (void*)i2c1);
 }
 
 bool GyroTask::initialize_gyro() {
@@ -20,17 +21,17 @@ bool GyroTask::initialize_gyro() {
     gyro_config.output_rate = L3GD20::OutputRate::HZ_95;
     
     if (!gyro_.initialize_config(gyro_config)) {
-        printf("Gyro Task: FAILED to initialize gyroscope\n");
+        printf("[GYRO] FAILED to initialize gyroscope\n");
         return false;
     }
         
-    printf("Gyro Task: gyroscope initialized successfully\n");
+    printf("[GYRO] Gyroscope initialized successfully\n");
     return true;
 }
 
 void GyroTask::process_gyro_data() {
     auto gyro_data = gyro_.read_gyro();
-    
+
     SensorData sensor_data;
     sensor_data.gyro = gyro_data;
     sensor_data.sequence_number++;

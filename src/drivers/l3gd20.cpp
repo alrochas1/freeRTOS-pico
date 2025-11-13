@@ -17,23 +17,23 @@ bool L3GD20::initialize() {
 bool L3GD20::initialize_config(const Config& config) {
     config_ = config;
     
-    printf("Initializing %s...\n", get_name());
+    printf("[GYRO] Initializing %s...\n", get_name());
     
-    if (!verify_connection(WHO_AM_I_REG, WHO_AM_I_VALUE)) {
-        printf("%s not found or communication failed\n", get_name());
-        return false;
+    if (!verify_connection(config::imu::WHO_AM_I_REG, config::imu::WHO_AM_I_VALUE)) {
+        printf("[GYRO] %s not found or communication failed\n", get_name());
+        // return false; // IMPROVE: Allow degraded mode
     }
     
     // Configure the device
     if (!set_ctrl_reg1() || !set_ctrl_reg4()) {
-        printf("L3GD20 configuration failed\n");
+        printf("[GYRO] %s configuration failed\n", get_name());
         return false;
     }
     
     sleep_ms(10); 
     
 
-    printf("%s initialized successfully\n", get_name());
+    printf("[GYRO] %s initialized successfully\n", get_name());
     printf("  Range: %d dps, Rate: configured, Samples: 0\n", 
            config_.range == Range::DPS_250 ? 250 : 
            config_.range == Range::DPS_500 ? 500 : 2000);
@@ -46,13 +46,13 @@ bool L3GD20::initialize_config(const Config& config) {
 void L3GD20::calculate_sensitivity() {
     switch (config_.range) {
         case Range::DPS_250:
-            sensitivity_dps_digit_ = 8.75f / 1000.0f; // mdps/digit to dps/digit
+            sensitivity_dps_digit_ = 0.00875F; // mdps/digit to dps/digit
             break;
         case Range::DPS_500:
-            sensitivity_dps_digit_ = 17.50f / 1000.0f;
+            sensitivity_dps_digit_ = 0.01750F;
             break;
         case Range::DPS_2000:
-            sensitivity_dps_digit_ = 70.0f / 1000.0f;
+            sensitivity_dps_digit_ = 0.07000F;
             break;
     }
 }
@@ -60,13 +60,13 @@ void L3GD20::calculate_sensitivity() {
 bool L3GD20::set_ctrl_reg1() {
     uint8_t ctrl_reg1 = 0x0F; // Power on, enable XYZ axes
     
-    // Add data rate
-    switch (config_.output_rate) {
-        case OutputRate::HZ_95:  ctrl_reg1 |= (0b00 << 6); break;
-        case OutputRate::HZ_190: ctrl_reg1 |= (0b01 << 6); break;
-        case OutputRate::HZ_380: ctrl_reg1 |= (0b10 << 6); break;
-        case OutputRate::HZ_760: ctrl_reg1 |= (0b11 << 6); break;
-    }
+    // // Add data rate
+    // switch (config_.output_rate) {
+    //     case OutputRate::HZ_95:  ctrl_reg1 |= (0b00 << 6); break;
+    //     case OutputRate::HZ_190: ctrl_reg1 |= (0b01 << 6); break;
+    //     case OutputRate::HZ_380: ctrl_reg1 |= (0b10 << 6); break;
+    //     case OutputRate::HZ_760: ctrl_reg1 |= (0b11 << 6); break;
+    // }
     
     return write_register(0x20, ctrl_reg1) == Result::SUCCESS;
 }
@@ -91,7 +91,7 @@ GyroData L3GD20::read_gyro() {
     
     // Read data registers (0x28-0x2D) with auto-increment (0x80)
     if (read_registers(0x28 | 0x80, buffer) != Result::SUCCESS) {
-        printf("Failed to read gyro data registers\n");
+        printf("[GYRO] Failed to read %s gyro data registers\n", get_name());
         return GyroData();
     }
     
