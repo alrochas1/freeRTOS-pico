@@ -6,23 +6,19 @@
 #include <imu_project/config/project_config.hpp>
 
 
+namespace imu_project {
+
 class LedTask : public Task {
 private:
     uint8_t led_pin;
     bool state = false;
     
 protected:
-    void run() override {
-        gpio_init(led_pin);
-        gpio_set_dir(led_pin, GPIO_OUT);
-        
-        while (true) {
-            gpio_put(led_pin, state);
-            state = !state;
-            delay(250);
-        }
-    }
+    void run() override;
     
 public:
-    LedTask() : Task("LED", config::LED_TASK_STACK_SIZE, config::LED_TASK_PRIORITY), led_pin(PICO_DEFAULT_LED_PIN) {}
+    LedTask();
 }; 
+
+
+} // namespace imu_project
