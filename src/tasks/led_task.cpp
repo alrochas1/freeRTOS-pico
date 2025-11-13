@@ -18,7 +18,7 @@ void LedTask::run() {
     gpio_init(led_pin);
     gpio_set_dir(led_pin, GPIO_OUT);
     
-    printf("LED Task started - Blink interval: %lu ms\n", tasks::LED_BLINK_MS);
+    printf("[LED] Task started - Blink interval: %lu ms\n", tasks::LED_BLINK_MS);
     
     while (true) {
         gpio_put(led_pin, state);

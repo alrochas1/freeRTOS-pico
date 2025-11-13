@@ -6,6 +6,7 @@
 #include "hardware/i2c.h"
 
 #include "imu_project/tasks/led_task.hpp"
+#include "imu_project/tasks/log_task.hpp"
 #include "imu_project/tasks/gyro_task.hpp"
 
 
@@ -34,12 +35,13 @@ int main() {
     
     
     LedTask led_task;
+    LogTask log_task(sensor_queue);
     GyroTask gyro_task(sensor_queue);
     
     // Start tasks
     bool success = led_task.start() && 
-                   gyro_task.start() /*&& 
-                   log_task.start()*/;
+                   gyro_task.start() && 
+                   log_task.start();
     
     if (!success) {
         printf("ERROR: Failed to start one or more tasks\n");
