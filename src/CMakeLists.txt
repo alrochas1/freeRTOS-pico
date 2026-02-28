@@ -31,6 +31,7 @@ target_link_libraries(${ProjectName}
     pico_stdlib 
     hardware_adc
     hardware_i2c
+    hardware_pwm
     FreeRTOS-Kernel-Heap4 
     )
 

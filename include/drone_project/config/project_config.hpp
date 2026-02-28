@@ -20,7 +20,7 @@ namespace i2c {
 // IMU addresses
 namespace imu {
     constexpr uint8_t GYRO_ADDRESS = 0x69;      // L3GD20
-    constexpr uint8_t ACCEL_ADDRESS = 0x1E; // LSM303D
+    constexpr uint8_t ACCEL_ADDRESS = 0x1E;     // LSM303D
     
     namespace gyro{
         constexpr uint8_t WHO_AM_I_VALUE = 0xD3;   // WHO_AM_I value for L3GD20
@@ -52,6 +52,8 @@ namespace tasks {
     constexpr uint32_t GYRO_SAMPLE_MS = 100; // 10 Hz
     constexpr uint32_t ACCEL_SAMPLE_MS = 100; // 10 Hz
     constexpr uint32_t LOG_PRINT_MS = 100;
+
+    // TODO: Add motor task configuration
 } // namespace tasks
 
 // Queue configuration
