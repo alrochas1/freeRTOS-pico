@@ -20,24 +20,37 @@ namespace i2c {
 // IMU addresses
 namespace imu {
     constexpr uint8_t GYRO_ADDRESS = 0x69;      // L3GD20
-    constexpr uint8_t ACCEL_MAG_ADDRESS = 0x1E; // LSM303D
+    constexpr uint8_t ACCEL_ADDRESS = 0x1E; // LSM303D
     
-    constexpr uint8_t WHO_AM_I_VALUE = 0xD3;   // WHO_AM_I value for L3GD20
-    constexpr uint8_t WHO_AM_I_REG = 0x0F;     // WHO_AM_I register for L3GD20
+    namespace gyro{
+        constexpr uint8_t WHO_AM_I_VALUE = 0xD3;   // WHO_AM_I value for L3GD20
+        constexpr uint8_t WHO_AM_I_REG = 0x0F;     // WHO_AM_I register for L3GD20
+    }
+    namespace accel{
+        constexpr uint8_t WHO_AM_I_VALUE = 0x3C;   // WHO_AM_I value for LSM303D accel
+        constexpr uint8_t WHO_AM_I_REG = 0x0F;     // WHO_AM_I register for LSM303D accel
+    }
+    namespace mag{
+        constexpr uint8_t WHO_AM_I_VALUE = 0xD3;   // WHO_AM_I value for LSM303D mag (revisar)
+        constexpr uint8_t WHO_AM_I_REG = 0x0F;     // WHO_AM_I register for LSM303D mag
+    }
 } // namespace imu
 
 // Task configuration
 namespace tasks {
     constexpr uint32_t LED_STACK_SIZE = 256;
     constexpr uint32_t GYRO_STACK_SIZE = 1024;
+    constexpr uint32_t ACCEL_STACK_SIZE = 1024;
     constexpr uint32_t LOG_STACK_SIZE = 1024;
     
     constexpr uint8_t LED_PRIORITY = 1;
     constexpr uint8_t GYRO_PRIORITY = 2;
+    constexpr uint8_t ACCEL_PRIORITY = 2;
     constexpr uint8_t LOG_PRIORITY = 1;
     
     constexpr uint32_t LED_BLINK_MS = 500;
     constexpr uint32_t GYRO_SAMPLE_MS = 100; // 10 Hz
+    constexpr uint32_t ACCEL_SAMPLE_MS = 100; // 10 Hz
     constexpr uint32_t LOG_PRINT_MS = 100;
 } // namespace tasks
 

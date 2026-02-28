@@ -5,8 +5,10 @@
 
 namespace imu_project {
 
+using namespace config;
+
 L3GD20::L3GD20(i2c_inst_t* i2c) 
-    : I2CDevice(i2c, config::imu::GYRO_ADDRESS) {
+    : I2CDevice(i2c, imu::GYRO_ADDRESS) {
     calculate_sensitivity();
 }
 
@@ -19,7 +21,7 @@ bool L3GD20::initialize_config(const Config& config) {
     
     printf("[GYRO] Initializing %s...\n", get_name());
     
-    if (!verify_connection(config::imu::WHO_AM_I_REG, config::imu::WHO_AM_I_VALUE)) {
+    if (!verify_connection(imu::gyro::WHO_AM_I_REG, imu::gyro::WHO_AM_I_VALUE)) {
         printf("[GYRO] %s not found or communication failed\n", get_name());
         // return false; // IMPROVE: Allow degraded mode
     }
@@ -34,7 +36,7 @@ bool L3GD20::initialize_config(const Config& config) {
     
 
     printf("[GYRO] %s initialized successfully\n", get_name());
-    printf("  Range: %d dps, Rate: configured, Samples: 0\n", 
+    printf("[GYRO] Range: %d dps, Rate: configured, Samples: 0\n", 
            config_.range == Range::DPS_250 ? 250 : 
            config_.range == Range::DPS_500 ? 500 : 2000);
     

@@ -8,6 +8,7 @@
 #include "imu_project/tasks/led_task.hpp"
 #include "imu_project/tasks/log_task.hpp"
 #include "imu_project/tasks/gyro_task.hpp"
+#include "imu_project/tasks/accel_task.hpp"
 
 
 int main() {
@@ -23,24 +24,36 @@ int main() {
     printf("Compiled: %s %s\n", __DATE__, __TIME__);
 
 
-    QueueHandle_t sensor_queue = xQueueCreate(
+    QueueHandle_t gyro_queue = xQueueCreate(
+        queues::SENSOR_QUEUE_LENGTH, 
+        sizeof(SensorData)
+    );
+
+    QueueHandle_t accel_queue = xQueueCreate(
         queues::SENSOR_QUEUE_LENGTH, 
         sizeof(SensorData)
     );
     
-    if (!sensor_queue) {
+    QueueHandle_t mag_queue = xQueueCreate(
+        queues::SENSOR_QUEUE_LENGTH, 
+        sizeof(SensorData)
+    );
+
+    if (!gyro_queue || !accel_queue || !mag_queue) {  // CHANGE
         printf("ERROR: Failed to create sensor queue\n");
         return 1;
     }
     
     
     LedTask led_task;
-    LogTask log_task(sensor_queue);
-    GyroTask gyro_task(sensor_queue);
+    LogTask log_task(gyro_queue, accel_queue, mag_queue);
+    GyroTask gyro_task(gyro_queue);
+    AccelTask accel_task(accel_queue);
     
     // Start tasks
     bool success = led_task.start() && 
                    gyro_task.start() && 
+                   accel_task.start() && 
                    log_task.start();
     
     if (!success) {

@@ -19,10 +19,7 @@ public:
 private:
     Config config_;
     float sensitivity_dps_digit_{0.0f};
-    
-    static constexpr uint8_t WHO_AM_I_VALUE = 0xD4;
-    static constexpr uint8_t WHO_AM_I_REG = 0x0F;
-    
+        
     void calculate_sensitivity();
     bool set_ctrl_reg1();
     bool set_ctrl_reg4();

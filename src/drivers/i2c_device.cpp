@@ -25,7 +25,7 @@ I2CDevice::I2CDevice(i2c_inst_t* i2c, uint8_t address)
         gpio_pull_up(pins::I2C_SCL);
         initialized_ports.insert(i2c_port_);
 
-        printf("I2C initialized on port %p at %lu Hz\n", (void*)i2c_port_, i2c::BAUD_RATE);
+        printf("I2C with address 0x%02X initialized on port %p at %lu Hz\n", device_address_, (void*)i2c_port_, i2c::BAUD_RATE);
     }
 }
 

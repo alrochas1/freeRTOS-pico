@@ -1,4 +1,4 @@
-// gyro_task.hpp
+// accel_task.hpp
 #pragma once
 #include "FreeRTOS.h"
 #include <queue.h>
@@ -6,24 +6,24 @@
 #include <imu_project/types/sensor_data.hpp>
 
 #include "task_wrapper.hpp"
-#include <imu_project/drivers/l3gd20.hpp>
+#include <imu_project/drivers/lsm303d_accel.hpp>
 
 
 namespace imu_project {
 
-class GyroTask : public I2CSensorTask {
+class AccelTask : public I2CSensorTask {
 private:
-    L3GD20 gyro_;
+    LSM303D_Accel accel_;
     
     bool initialize_sensor();
-    void process_gyro_data();
+    void process_accel_data();
     // void handle_read_error();
 
 public:
-    explicit GyroTask(QueueHandle_t data_queue);
+    explicit AccelTask(QueueHandle_t data_queue);
     
-    GyroTask(const GyroTask&) = delete;
-    GyroTask& operator=(const GyroTask&) = delete;
+    AccelTask(const AccelTask&) = delete;
+    AccelTask& operator=(const AccelTask&) = delete;
     
     void run() override;
     

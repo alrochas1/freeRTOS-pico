@@ -1,6 +1,7 @@
 // task_wrapper.hpp
 #pragma once
 #include "FreeRTOS.h"
+#include <queue.h>
 #include "task.h"
 #include <functional>
 #include <string>
@@ -35,6 +36,21 @@ public:
     }
     
     void delay(uint32_t ms) {
-        vTaskDelay(pdMS_TO_TICKS(ms));
+        TickType_t last = xTaskGetTickCount();
+        vTaskDelayUntil(&last, pdMS_TO_TICKS(ms));
     }
+};
+
+
+class I2CSensorTask : public Task{
+protected:
+    QueueHandle_t data_queue_;
+    bool initialized_{false};
+
+    virtual bool initialize_sensor() = 0;
+
+public:
+    I2CSensorTask(const std::string& name, uint32_t stack_size, UBaseType_t priority, QueueHandle_t data_queue)
+        : Task(name, stack_size, priority), data_queue_(data_queue) {}
+
 };

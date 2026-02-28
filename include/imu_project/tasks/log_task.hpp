@@ -15,9 +15,11 @@ namespace imu_project {
 class LogTask : public Task {
 private:
     QueueHandle_t gyro_queue_;
+    QueueHandle_t accel_queue_;
+    QueueHandle_t mag_queue_;
     
 public:
-    LogTask(QueueHandle_t gyro_queue);
+    LogTask(QueueHandle_t gyro_queue, QueueHandle_t accel_queue, QueueHandle_t mag_queue);
 
     void run() override;
 }; 

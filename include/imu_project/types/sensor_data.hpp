@@ -16,6 +16,18 @@ struct Vector3f {
     bool is_valid() const {
         return !(std::isnan(x) || std::isnan(y) || std::isnan(z));
     }
+
+    float magnitude() const {
+        return std::sqrt(x*x + y*y + z*z);
+    }
+    
+    Vector3f normalized() const {
+        float mag = magnitude();
+        if (mag > 0.0f) {
+            return Vector3f(x/mag, y/mag, z/mag);
+        }
+        return *this;
+    }
 };
 
 struct GyroData {
@@ -28,13 +40,43 @@ struct GyroData {
         : angular_velocity(velocity), timestamp_ms(ts), valid(velocity.is_valid()) {}
 };
 
+struct AccelData {
+    Vector3f linear_acceleration; // m/s²
+    uint32_t timestamp_ms{0};
+    bool valid{false};
+    
+    AccelData() = default;
+    AccelData(Vector3f acceleration, uint32_t ts)
+        : linear_acceleration(acceleration), timestamp_ms(ts), valid(acceleration.is_valid()) {}
+};
+
+struct MagData {
+    Vector3f magnetic_field; // uT
+    uint32_t timestamp_ms{0};
+    bool valid{false};
+    
+    MagData() = default;
+    MagData(Vector3f field, uint32_t ts)
+        : magnetic_field(field), timestamp_ms(ts), valid(field.is_valid()) {}
+};
+
 struct SensorData {
     GyroData gyro;
-    // TODO: AccelData accel; MagData mag;
+    AccelData accel; 
+    MagData mag;
+
     uint32_t sequence_number{0};
     
-    bool is_valid() const {
-        return gyro.valid;
+    bool has_gyro() const { return gyro.valid; }
+    bool has_accel() const { return accel.valid; }
+    bool has_mag() const { return mag.valid; }
+
+    bool is_complete() const {
+        return has_gyro() && has_accel() && has_mag();
+    }
+    
+    bool has_any_data() const {
+        return has_gyro() || has_accel() || has_mag();
     }
 };
 

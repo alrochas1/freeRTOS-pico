@@ -8,14 +8,13 @@ namespace imu_project {
 using namespace config;
 
 GyroTask::GyroTask(QueueHandle_t data_queue) 
-    : Task("GYRO", tasks::GYRO_STACK_SIZE, tasks::GYRO_PRIORITY)
-    , gyro_(i2c1)
-    , data_queue_(data_queue) {
+    : I2CSensorTask("GYRO", tasks::GYRO_STACK_SIZE, tasks::GYRO_PRIORITY, data_queue)
+    , gyro_(i2c1) {
     
     printf("[GYRO] Task created. I2C device address: 0x%02X on port %p\n", gyro_.get_address(), (void*)i2c1);
 }
 
-bool GyroTask::initialize_gyro() {
+bool GyroTask::initialize_sensor() {
     L3GD20::Config gyro_config;
     gyro_config.range = L3GD20::Range::DPS_500;
     gyro_config.output_rate = L3GD20::OutputRate::HZ_95;
@@ -44,7 +43,7 @@ void GyroTask::process_gyro_data() {
 void GyroTask::run() {
     printf("[GYRO] Task started - Sample rate: %lu ms\n", tasks::GYRO_SAMPLE_MS);
     
-    if (!initialize_gyro()) {
+    if (!initialize_sensor()) {
         printf("[GYRO] WARNING: Starting in degraded mode\n");
     }
     
