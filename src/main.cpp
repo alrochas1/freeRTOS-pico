@@ -34,19 +34,20 @@ int main() {
         sizeof(SensorData)
     );
     
-    QueueHandle_t mag_queue = xQueueCreate(
-        queues::SENSOR_QUEUE_LENGTH, 
-        sizeof(SensorData)
-    );
+    // TODO: Implement mag task (not used in drone_project)
+    // QueueHandle_t mag_queue = xQueueCreate(
+    //     queues::SENSOR_QUEUE_LENGTH, 
+    //     sizeof(SensorData)
+    // );
 
-    if (!gyro_queue || !accel_queue || !mag_queue) {  // CHANGE
+    if (!gyro_queue || !accel_queue) {  // CHANGE
         printf("ERROR: Failed to create sensor queue\n");
         return 1;
     }
     
     
     LedTask led_task;
-    LogTask log_task(gyro_queue, accel_queue, mag_queue);
+    LogTask log_task(gyro_queue, accel_queue);
     GyroTask gyro_task(gyro_queue);
     AccelTask accel_task(accel_queue);
     
