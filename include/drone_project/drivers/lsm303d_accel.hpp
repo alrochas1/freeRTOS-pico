@@ -1,10 +1,10 @@
 // lsm303d_accel.hpp
 #pragma once
 #include "i2c_device.hpp"
-#include <imu_project/types/sensor_data.hpp>
-#include "imu_project/config/project_config.hpp"
+#include <drone_project/types/sensor_data.hpp>
+#include "drone_project/config/project_config.hpp"
 
-namespace imu_project {
+namespace drone_project {
 
 class LSM303D_Accel : public I2CDevice {
 public:
@@ -37,4 +37,4 @@ public:
     static constexpr const char* get_name() { return "LSM303D_Accel"; }
 };
 
-} // namespace imu_project
+} // namespace drone_project

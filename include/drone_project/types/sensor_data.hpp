@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <cmath>
 
-namespace imu_project {
+namespace drone_project {
 
 struct Vector3f {
     float x{0.0f};
@@ -80,4 +80,4 @@ struct SensorData {
     }
 };
 
-} // namespace imu_project
+} // namespace drone_project

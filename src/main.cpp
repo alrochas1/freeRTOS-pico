@@ -5,15 +5,15 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 
-#include "imu_project/tasks/led_task.hpp"
-#include "imu_project/tasks/log_task.hpp"
-#include "imu_project/tasks/gyro_task.hpp"
-#include "imu_project/tasks/accel_task.hpp"
+#include "drone_project/tasks/led_task.hpp"
+#include "drone_project/tasks/log_task.hpp"
+#include "drone_project/tasks/gyro_task.hpp"
+#include "drone_project/tasks/accel_task.hpp"
 
 
 int main() {
     
-    using namespace imu_project;
+    using namespace drone_project;
     using namespace config;
 
     stdio_init_all();

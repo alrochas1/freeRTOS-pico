@@ -3,10 +3,10 @@
 #include "pico/stdlib.h"
 
 #include "task_wrapper.hpp"
-#include <imu_project/config/project_config.hpp>
+#include <drone_project/config/project_config.hpp>
 
 
-namespace imu_project {
+namespace drone_project {
 
 class LedTask : public Task {
 private:
@@ -21,4 +21,4 @@ public:
 }; 
 
 
-} // namespace imu_project
+} // namespace drone_project

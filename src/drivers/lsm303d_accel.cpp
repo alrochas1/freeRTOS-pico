@@ -1,8 +1,8 @@
-#include "imu_project/drivers/lsm303d_accel.hpp"
+#include "drone_project/drivers/lsm303d_accel.hpp"
 #include <cstdio>
 #include <array>
 
-namespace imu_project {
+namespace drone_project {
 
 using namespace config;
 
@@ -115,4 +115,4 @@ AccelData LSM303D_Accel::read_accel() {
     return AccelData(linear_acceleration, to_ms_since_boot(get_absolute_time()));
 }
 
-} // namespace imu_project
+} // namespace drone_project

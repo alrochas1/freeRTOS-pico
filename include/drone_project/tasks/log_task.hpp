@@ -6,11 +6,11 @@
 #include <queue.h>
 
 #include "task_wrapper.hpp"
-#include <imu_project/config/project_config.hpp>
-#include <imu_project/types/sensor_data.hpp>
+#include <drone_project/config/project_config.hpp>
+#include <drone_project/types/sensor_data.hpp>
 
 
-namespace imu_project {
+namespace drone_project {
 
 class LogTask : public Task {
 private:
@@ -25,4 +25,4 @@ public:
 }; 
 
 
-} // namespace imu_project
+} // namespace drone_project

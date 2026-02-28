@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <array>
 
-namespace imu_project {
+namespace drone_project {
 
 class I2CDevice {
 public:
@@ -49,4 +49,4 @@ public:
     uint8_t get_address() const { return device_address_; }
 };
 
-} // namespace imu_project
+} // namespace drone_project

@@ -1,12 +1,12 @@
 // i2c_device.cpp
-#include "imu_project/drivers/i2c_device.hpp"
-#include "imu_project/config/project_config.hpp"
+#include "drone_project/drivers/i2c_device.hpp"
+#include "drone_project/config/project_config.hpp"
 
 #include <cstdio>
 #include <set>
 #include <array>
 
-namespace imu_project {
+namespace drone_project {
 
 using namespace config;
 
@@ -150,4 +150,4 @@ bool I2CDevice::verify_connection(uint8_t who_am_i_reg, uint8_t expected_id) {
     return true;
 }
 
-} // namespace imu_project
+} // namespace drone_project

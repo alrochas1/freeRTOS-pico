@@ -1,9 +1,9 @@
 // gyro_task.cpp
-#include "imu_project/tasks/gyro_task.hpp"
-#include "imu_project/config/project_config.hpp"
+#include "drone_project/tasks/gyro_task.hpp"
+#include "drone_project/config/project_config.hpp"
 #include <cstdio>
 
-namespace imu_project {
+namespace drone_project {
 
 using namespace config;
 
@@ -53,4 +53,4 @@ void GyroTask::run() {
     }
 }
 
-} // namespace imu_project
+} // namespace drone_project

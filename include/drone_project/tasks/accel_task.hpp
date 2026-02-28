@@ -3,13 +3,13 @@
 #include "FreeRTOS.h"
 #include <queue.h>
 
-#include <imu_project/types/sensor_data.hpp>
+#include <drone_project/types/sensor_data.hpp>
 
 #include "task_wrapper.hpp"
-#include <imu_project/drivers/lsm303d_accel.hpp>
+#include <drone_project/drivers/lsm303d_accel.hpp>
 
 
-namespace imu_project {
+namespace drone_project {
 
 class AccelTask : public I2CSensorTask {
 private:
@@ -29,4 +29,4 @@ public:
     
 };
 
-} // namespace imu_project
+} // namespace drone_project

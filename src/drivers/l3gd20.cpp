@@ -1,9 +1,9 @@
 // l3gd20.cpp
-#include "imu_project/drivers/l3gd20.hpp"
+#include "drone_project/drivers/l3gd20.hpp"
 #include <cstdio>
 #include <array>
 
-namespace imu_project {
+namespace drone_project {
 
 using namespace config;
 
@@ -113,4 +113,4 @@ GyroData L3GD20::read_gyro() {
     return data;
 }
 
-} // namespace imu_project
+} // namespace drone_project

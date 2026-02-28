@@ -1,9 +1,9 @@
 // led_task.cpp
-#include "imu_project/tasks/led_task.hpp"
-#include "imu_project/config/project_config.hpp"
+#include "drone_project/tasks/led_task.hpp"
+#include "drone_project/config/project_config.hpp"
 #include <cstdio>
 
-namespace imu_project {
+namespace drone_project {
 
 using namespace config;
 
@@ -28,4 +28,4 @@ void LedTask::run() {
     }
 }
 
-} // namespace imu_project
+} // namespace drone_project

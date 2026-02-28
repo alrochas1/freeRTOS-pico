@@ -1,10 +1,10 @@
 // l3gd20.hpp
 #pragma once
 #include "i2c_device.hpp"
-#include <imu_project/types/sensor_data.hpp>
-#include "imu_project/config/project_config.hpp"
+#include <drone_project/types/sensor_data.hpp>
+#include "drone_project/config/project_config.hpp"
 
-namespace imu_project {
+namespace drone_project {
 
 class L3GD20 : public I2CDevice {
 public:
@@ -37,4 +37,4 @@ public:
     static constexpr const char* get_name() { return "L3GD20"; }
 };
 
-} // namespace imu_project
+} // namespace drone_project
