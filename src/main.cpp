@@ -18,7 +18,7 @@
 #define MODE_MOTOR_TEST 2
 #define MODE_FLIGHT     3
 
-#define CURRENT_MODE MODE_MOTOR_TEST
+#define CURRENT_MODE MODE_FLIGHT
 
 using namespace config;
 
@@ -96,15 +96,13 @@ int imu_main() {
     
     
     LedTask led_task;
-    LogTask log_task(gyro_queue, accel_queue);
     GyroTask gyro_task(gyro_queue);
     AccelTask accel_task(accel_queue);
     
     // Start tasks
     bool success = led_task.start() && 
                    gyro_task.start() && 
-                   accel_task.start() && 
-                   log_task.start();
+                   accel_task.start();
 
     return start_tasks(success);
 }

@@ -8,16 +8,15 @@
 #include "task_wrapper.hpp"
 #include <drone_project/config/project_config.hpp>
 #include <drone_project/types/sensor_data.hpp>
+#include "drone_project/types/system_data.hpp"
 
 
 class LogTask : public Task {
 private:
-    QueueHandle_t gyro_queue_;
-    QueueHandle_t accel_queue_;
-    // QueueHandle_t mag_queue_; // TODO: Implement mag task (not used in drone_project)
+    QueueHandle_t snapshot_queue_;
     
 public:
-    LogTask(QueueHandle_t gyro_queue, QueueHandle_t accel_queue);
+    LogTask(QueueHandle_t snapshot_queue_);
 
     void run() override;
 }; 
