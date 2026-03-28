@@ -5,22 +5,44 @@
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 
+#include "drone_project/config/project_config.hpp"
+#include "drone_project/types/system_data.hpp"
+
 #include "drone_project/tasks/led_task.hpp"
 #include "drone_project/tasks/log_task.hpp"
 
 #include "drone_project/tasks/gyro_task.hpp"
 #include "drone_project/tasks/accel_task.hpp"
+//#include "drone_project/tasks/ir_task.hpp"
+
 #include "drone_project/tasks/motor_task.hpp"
 
-
-// For testing individual tasks without the full setup
-#define MODE_IMU_TEST   1
-#define MODE_MOTOR_TEST 2
-#define MODE_FLIGHT     3
-
-#define CURRENT_MODE MODE_FLIGHT
-
 using namespace config;
+
+// Create the different queues used by the system
+SystemQueues create_queues() {
+    SystemQueues queues;
+
+    // System queue for system monitor and logging
+    queues.snapshot_queue = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SystemSnapshot));
+
+    // Imput Queues
+    queues.rc_queue     = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(RCCommand));
+    queues.gyro_queue   = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
+    queues.accel_queue  = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
+    //queues.mag_queue    = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
+
+    // Add error handling for queue creation
+    if (!queues.snapshot_queue ||
+        !queues.rc_queue ||
+        !queues.gyro_queue ||
+        !queues.accel_queue) {
+    printf("QUEUE INIT FAILED\n");
+    while(true);
+}
+    
+    return queues;
+}
 
 
 void common_main() {
@@ -56,69 +78,47 @@ int start_tasks(bool success) {
 
 
 int drone_main() {
+
+    // For testing individual tasks without the full setup
+    RunMode running_mode = RunMode::FLIGHT;
     
     common_main();
 
-    // TODO: Implement
-    bool success = true; // Placeholder until I implement the actual tasks
-    return start_tasks(success);
-}
-
-
-// ########################
-// ######### TEST #########
-// ########################
-
-int imu_main() {
-
-    common_main();
     
-    QueueHandle_t gyro_queue = xQueueCreate(
-        queues::SENSOR_QUEUE_LENGTH, 
-        sizeof(SensorData)
-    );
+    // Create queues
+    SystemQueues queues = create_queues();
 
-    QueueHandle_t accel_queue = xQueueCreate(
-        queues::SENSOR_QUEUE_LENGTH, 
-        sizeof(SensorData)
-    );
-    
-    // TODO: Implement mag task (not used in drone_project)
-    // QueueHandle_t mag_queue = xQueueCreate(
-    //     queues::SENSOR_QUEUE_LENGTH, 
-    //     sizeof(SensorData)
-    // );
 
-    if (!gyro_queue || !accel_queue) {  // CHANGE
-        printf("ERROR: Failed to create sensor queue\n");
-        return 1;
+    // Create tasks (TODO: Add structure)
+    // System monitor tasks
+    LedTask led_task;
+    LogTask log_task(queues.snapshot_queue);
+
+    // Imput tasks
+    if (running_mode == RunMode::IMU_SIM || running_mode == RunMode::SIMULATION) {
+        // GyroSimTask gyro_task(queues.gyro_queue);
+        // AccelSimTask accel_task(queues.accel_queue);
+    } else {
+        GyroTask gyro_task(queues.gyro_queue);
+        AccelTask accel_task(queues.accel_queue);
+    }   
+
+    if (running_mode == RunMode::RC_SIM || running_mode == RunMode::SIMULATION) {
+        // RCSimTask ir_task(queues.rc_queue);
+    } else {
+        //IRTask ir_task(16, queues.rc_queue);    // Change for RC task
     }
-    
-    
-    LedTask led_task;
-    GyroTask gyro_task(gyro_queue);
-    AccelTask accel_task(accel_queue);
-    
-    // Start tasks
-    bool success = led_task.start() && 
-                   gyro_task.start() && 
-                   accel_task.start();
 
-    return start_tasks(success);
-}
-
-
-int motor_main() {
-
-    common_main();
-    
-    LedTask led_task;
+    // ControlTask control_task(queues.rc_queue, queues.gyro_queue, queues.accel_queue, queues.motor_queue);
     MotorTask motor_task(4, 5, 6, 7); // Example GPIOs;
 
-    // Start tasks
-    bool success = led_task.start() && 
-                   motor_task.start();
 
+    // TODO: Implement
+    // Start tasks
+    // bool success = led_task.start() && 
+    //                log_task.start() &&
+    //                ir_task.start();
+    bool success = true;
     return start_tasks(success);
 }
 
@@ -128,13 +128,5 @@ int motor_main() {
 // ########################
 
 int main() {
-#if CURRENT_MODE == MODE_IMU_TEST
-    return imu_main();
-#elif CURRENT_MODE == MODE_MOTOR_TEST
-    return motor_main();
-#elif CURRENT_MODE == MODE_FLIGHT
     return drone_main();
-#else
-    #error "Invalid mode selected"
-#endif
 }

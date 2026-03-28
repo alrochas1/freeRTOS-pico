@@ -42,22 +42,35 @@ namespace imu {
 
 // Task configuration
 namespace tasks {
-    constexpr uint32_t LED_STACK_SIZE = 256;
-    constexpr uint32_t GYRO_STACK_SIZE = 1024;
-    constexpr uint32_t ACCEL_STACK_SIZE = 1024;
-    constexpr uint32_t LOG_STACK_SIZE = 1024;
+    constexpr uint32_t SYSTEM_STACK_SIZE    = 1024;
+    constexpr uint32_t LED_STACK_SIZE       = 256;
+    constexpr uint32_t LOG_STACK_SIZE       = 1024;
+    constexpr uint32_t GYRO_STACK_SIZE      = 1024;
+    constexpr uint32_t ACCEL_STACK_SIZE     = 1024;
+    constexpr uint32_t IR_STACK_SIZE        = 1024;
+    constexpr uint32_t RC_STACK_SIZE        = 1024;
+    constexpr uint32_t MOTOR_STACK_SIZE     = 1024;
     
-    constexpr uint8_t LED_PRIORITY = 1;
-    constexpr uint8_t GYRO_PRIORITY = 2;
-    constexpr uint8_t ACCEL_PRIORITY = 2;
-    constexpr uint8_t LOG_PRIORITY = 1;
     
-    constexpr uint32_t LED_BLINK_MS = 500;
-    constexpr uint32_t GYRO_SAMPLE_MS = 100; // 10 Hz
-    constexpr uint32_t ACCEL_SAMPLE_MS = 100; // 10 Hz
-    constexpr uint32_t LOG_PRINT_MS = 100;
+    constexpr uint8_t SYSTEM_PRIORITY   = 1;
+    constexpr uint8_t LED_PRIORITY      = 1;
+    constexpr uint8_t LOG_PRIORITY      = 1;
+    constexpr uint8_t GYRO_PRIORITY     = 2;
+    constexpr uint8_t ACCEL_PRIORITY    = 2;
+    constexpr uint8_t IR_PRIORITY       = 2;
+    constexpr uint8_t RC_PRIORITY       = 2;
+    constexpr uint8_t MOTOR_PRIORITY    = 2;
+
+
+    constexpr uint32_t LED_BLINK_MS     = 500;
+    constexpr uint32_t GYRO_SAMPLE_MS   = 100;  // 10 Hz
+    constexpr uint32_t ACCEL_SAMPLE_MS  = 100;  // 10 Hz
+    constexpr uint32_t LOG_PRINT_MS     = 100;
+    constexpr uint32_t IR_UPDATE_MS     = 20;   // 50 Hz
 
     // TODO: Add motor task configuration
+    // TODO: Add system task configuration
+    // TODO: Add rc task configuration
 } // namespace tasks
 
 // Queue configuration
