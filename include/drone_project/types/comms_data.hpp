@@ -1,7 +1,7 @@
 #pragma once
 
 struct RCCommand {
-    bool  state;      // ON/OFF
+    bool  valid;      // ON/OFF
     float throttle;
     float roll;
     float pitch;

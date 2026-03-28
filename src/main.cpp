@@ -8,6 +8,8 @@
 #include "drone_project/config/project_config.hpp"
 #include "drone_project/types/system_data.hpp"
 
+#include "drone_project/tasks/system_task.hpp"
+
 #include "drone_project/tasks/led_task.hpp"
 #include "drone_project/tasks/log_task.hpp"
 
@@ -24,7 +26,7 @@ SystemQueues create_queues() {
     SystemQueues queues;
 
     // System queue for system monitor and logging
-    queues.snapshot_queue = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SystemSnapshot));
+    queues.snapshot_queue = xQueueCreate(queues::SYSTEM_QUEUE_LENGTH, sizeof(SystemSnapshot));
 
     // Imput Queues
     queues.rc_queue     = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(RCCommand));
@@ -90,24 +92,24 @@ int drone_main() {
 
 
     // Create tasks (TODO: Add structure)
-    // System monitor tasks
+    SystemStateTask system_state_task(queues.gyro_queue, queues.accel_queue, queues.rc_queue, queues.snapshot_queue);
     LedTask led_task;
     LogTask log_task(queues.snapshot_queue);
 
     // Imput tasks
-    if (running_mode == RunMode::IMU_SIM || running_mode == RunMode::SIMULATION) {
+    /*if (running_mode == RunMode::IMU_SIM || running_mode == RunMode::SIMULATION) {
         // GyroSimTask gyro_task(queues.gyro_queue);
         // AccelSimTask accel_task(queues.accel_queue);
-    } else {
+    } else {*/
         GyroTask gyro_task(queues.gyro_queue);
         AccelTask accel_task(queues.accel_queue);
-    }   
+    // }   
 
-    if (running_mode == RunMode::RC_SIM || running_mode == RunMode::SIMULATION) {
+    /*if (running_mode == RunMode::RC_SIM || running_mode == RunMode::SIMULATION) {
         // RCSimTask ir_task(queues.rc_queue);
-    } else {
+    } else {*/
         //IRTask ir_task(16, queues.rc_queue);    // Change for RC task
-    }
+    //}
 
     // ControlTask control_task(queues.rc_queue, queues.gyro_queue, queues.accel_queue, queues.motor_queue);
     MotorTask motor_task(4, 5, 6, 7); // Example GPIOs;
@@ -115,10 +117,13 @@ int drone_main() {
 
     // TODO: Implement
     // Start tasks
-    // bool success = led_task.start() && 
-    //                log_task.start() &&
-    //                ir_task.start();
-    bool success = true;
+    bool success = led_task.start() && 
+                   log_task.start() &&
+                   system_state_task.start() &&
+                   gyro_task.start() &&
+                   accel_task.start() &&
+                   //ir_task.start() &&
+                   motor_task.start();
     return start_tasks(success);
 }
 

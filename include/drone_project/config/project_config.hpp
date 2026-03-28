@@ -7,7 +7,7 @@ namespace config {
 // Pins configuration
 namespace pins {
     constexpr uint8_t LED = PICO_DEFAULT_LED_PIN;
-    // TODO: Add USB pin
+    constexpr uint8_t USB_PIN = 24; // USB detection pin
     constexpr uint8_t I2C_SDA = 26;
     constexpr uint8_t I2C_SCL = 27;
     // TODO: Add motor pins configuration
@@ -42,7 +42,7 @@ namespace imu {
 
 // Task configuration
 namespace tasks {
-    constexpr uint32_t SYSTEM_STACK_SIZE    = 1024;
+    constexpr uint32_t SYSTEM_STACK_SIZE    = 256;
     constexpr uint32_t LED_STACK_SIZE       = 256;
     constexpr uint32_t LOG_STACK_SIZE       = 1024;
     constexpr uint32_t GYRO_STACK_SIZE      = 1024;
@@ -62,19 +62,20 @@ namespace tasks {
     constexpr uint8_t MOTOR_PRIORITY    = 2;
 
 
-    constexpr uint32_t LED_BLINK_MS     = 500;
+    constexpr uint32_t SYSTEM_UPDATE_MS = 50;   // 20 Hz
+    constexpr uint32_t LED_BLINK_MS     = 500;  //  2 Hz
+    constexpr uint32_t LOG_PRINT_MS     = 500;  //  2 Hz
     constexpr uint32_t GYRO_SAMPLE_MS   = 100;  // 10 Hz
     constexpr uint32_t ACCEL_SAMPLE_MS  = 100;  // 10 Hz
-    constexpr uint32_t LOG_PRINT_MS     = 100;
     constexpr uint32_t IR_UPDATE_MS     = 20;   // 50 Hz
 
     // TODO: Add motor task configuration
-    // TODO: Add system task configuration
     // TODO: Add rc task configuration
 } // namespace tasks
 
 // Queue configuration
 namespace queues {
+    constexpr uint8_t SYSTEM_QUEUE_LENGTH = 1;
     constexpr uint8_t SENSOR_QUEUE_LENGTH = 10;
     // constexpr uint8_t MAX_QUEUE_WAIT_MS = portMAX_DELAY;
 } // namespace queues

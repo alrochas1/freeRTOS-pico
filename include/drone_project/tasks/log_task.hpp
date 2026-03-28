@@ -13,6 +13,8 @@
 
 class LogTask : public Task {
 private:
+    const char* state_to_string(SystemState state);
+    
     QueueHandle_t snapshot_queue_;
     
 public:

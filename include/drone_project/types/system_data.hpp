@@ -2,14 +2,24 @@
 #include "drone_project/types/sensor_data.hpp"
 #include "drone_project/types/comms_data.hpp"
 
-// TODO: Update
+// SYSTEM STATES
 enum class SystemState {
     INIT,
     USB,        // System is connected to USB instead of battery (for development/testing)
-    DISARMED,
-    ARMED,
+    DISARMED,   // System is on battery but not ready for flight (motors off) - default state after init with battery
+    ARMED,      // System is ready for flight (can take off, motors on)
+    FLIGHT,     // System is in flight (motors on, not in failsafe)
     FAILSAFE,
     ERROR
+};
+
+struct SystemInputs {
+    bool usb_connected;
+    bool imu_ok;
+    bool rc_ok;
+
+    float throttle;
+    bool arm_switch;   // TODO: Check
 };
 
 enum class RunMode {
@@ -38,10 +48,10 @@ struct SystemQueues {
 };
 
 struct SystemSnapshot {
+    uint32_t timestamp_ms;
+    SystemState state;
     SensorData imu;
     RCCommand rc;
-    SystemState state;
-    uint32_t timestamp_ms;
 };
 
 

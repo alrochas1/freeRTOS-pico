@@ -17,7 +17,7 @@ void LogTask::run() {
     SystemSnapshot snap;
 
     TickType_t last = xTaskGetTickCount();
-    const TickType_t period = pdMS_TO_TICKS(200); // 5 Hz logging
+    const TickType_t period = pdMS_TO_TICKS(tasks::LOG_PRINT_MS); // 2 Hz logging
 
     while (true) {
 
@@ -28,10 +28,11 @@ void LogTask::run() {
             printf("[TS] %lu ms\n", snap.timestamp_ms);
 
             // STATE
-            printf("[STATE] %d\n", (int)snap.state);
+            printf("[STATE] %s\n", state_to_string(snap.state));
 
             // RC
-            printf("[RC] T:%.2f R:%.2f P:%.2f Y:%.2f\n",
+            printf("[RC] Valid:%s T:%.2f R:%.2f P:%.2f Y:%.2f\n",
+                   snap.rc.valid ? "OK" : "FAIL",
                    snap.rc.throttle,
                    snap.rc.roll,
                    snap.rc.pitch,
@@ -43,12 +44,25 @@ void LogTask::run() {
                    snap.imu.gyro.angular_velocity.y,
                    snap.imu.gyro.angular_velocity.z);
 
-            printf("[ACC ] %.2f %.2f %.2f\n",
+            printf("[ACCEL] %.2f %.2f %.2f\n",
                    snap.imu.accel.linear_acceleration.x,
                    snap.imu.accel.linear_acceleration.y,
                    snap.imu.accel.linear_acceleration.z);
         }
 
         vTaskDelayUntil(&last, period);
+    }
+}
+
+const char* LogTask::state_to_string(SystemState state) {
+    switch (state) {
+        case SystemState::INIT:      return "INIT";
+        case SystemState::USB:       return "USB";
+        case SystemState::DISARMED:  return "DISARMED";
+        case SystemState::ARMED:     return "ARMED";
+        case SystemState::FLIGHT:    return "FLIGHT";
+        case SystemState::FAILSAFE:  return "FAILSAFE";
+        case SystemState::ERROR:     return "ERROR";
+        default:                     return "UNKNOWN";
     }
 }
