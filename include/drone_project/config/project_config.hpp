@@ -68,6 +68,7 @@ namespace tasks {
     constexpr uint32_t GYRO_SAMPLE_MS   = 100;  // 10 Hz
     constexpr uint32_t ACCEL_SAMPLE_MS  = 100;  // 10 Hz
     constexpr uint32_t IR_UPDATE_MS     = 20;   // 50 Hz
+    constexpr uint32_t RC_UPDATE_MS     = 20;   // 50 Hz
 
     // TODO: Add motor task configuration
     // TODO: Add rc task configuration

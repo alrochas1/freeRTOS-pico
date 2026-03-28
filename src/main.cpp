@@ -19,6 +19,11 @@
 
 #include "drone_project/tasks/motor_task.hpp"
 
+// Sim tasks (for testing without hardware)
+#include "drone_project/tasks/sim/rc_sim_task.hpp"
+// #include "drone_project/tasks/sim/gyro_sim_task.hpp" --- TODO ---
+
+
 using namespace config;
 
 // Create the different queues used by the system
@@ -29,7 +34,7 @@ SystemQueues create_queues() {
     queues.snapshot_queue = xQueueCreate(queues::SYSTEM_QUEUE_LENGTH, sizeof(SystemSnapshot));
 
     // Imput Queues
-    queues.rc_queue     = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(RCCommand));
+    queues.rc_queue     = xQueueCreate(queues::SYSTEM_QUEUE_LENGTH, sizeof(RCCommand));
     queues.gyro_queue   = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
     queues.accel_queue  = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
     //queues.mag_queue    = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
@@ -82,7 +87,7 @@ int start_tasks(bool success) {
 int drone_main() {
 
     // For testing individual tasks without the full setup
-    RunMode running_mode = RunMode::FLIGHT;
+    RunMode running_mode = RunMode::RC_SIM;
     
     common_main();
 
@@ -96,20 +101,22 @@ int drone_main() {
     LedTask led_task;
     LogTask log_task(queues.snapshot_queue);
 
-    // Imput tasks
+    // Imput tasks (TODO: Improve this)
     /*if (running_mode == RunMode::IMU_SIM || running_mode == RunMode::SIMULATION) {
         // GyroSimTask gyro_task(queues.gyro_queue);
         // AccelSimTask accel_task(queues.accel_queue);
-    } else {*/
+    } 
+    else {*/
         GyroTask gyro_task(queues.gyro_queue);
         AccelTask accel_task(queues.accel_queue);
     // }   
 
-    /*if (running_mode == RunMode::RC_SIM || running_mode == RunMode::SIMULATION) {
-        // RCSimTask ir_task(queues.rc_queue);
-    } else {*/
-        //IRTask ir_task(16, queues.rc_queue);    // Change for RC task
-    //}
+    Task* rc_task = nullptr;
+    if (running_mode == RunMode::RC_SIM || running_mode == RunMode::SIMULATION) {
+        rc_task = new RCSimTask(queues.rc_queue);
+    } /*else {
+        rc_task = new IRTask(16, queues.rc_queue);
+    }*/
 
     // ControlTask control_task(queues.rc_queue, queues.gyro_queue, queues.accel_queue, queues.motor_queue);
     MotorTask motor_task(4, 5, 6, 7); // Example GPIOs;
@@ -122,7 +129,7 @@ int drone_main() {
                    system_state_task.start() &&
                    gyro_task.start() &&
                    accel_task.start() &&
-                   //ir_task.start() &&
+                   rc_task->start() &&
                    motor_task.start();
     return start_tasks(success);
 }
