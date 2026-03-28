@@ -3,8 +3,6 @@
 #include "drone_project/config/project_config.hpp"
 #include <cstdio>
 
-namespace drone_project {
-
 using namespace config;
 
 LogTask::LogTask(QueueHandle_t gyro_queue, QueueHandle_t accel_queue) 
@@ -59,5 +57,3 @@ void LogTask::run() {
         delay(tasks::LOG_PRINT_MS);
     }
 }
-
-} // namespace drone_project

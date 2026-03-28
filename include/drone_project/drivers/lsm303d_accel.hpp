@@ -4,8 +4,6 @@
 #include <drone_project/types/sensor_data.hpp>
 #include "drone_project/config/project_config.hpp"
 
-namespace drone_project {
-
 class LSM303D_Accel : public I2CDevice {
 public:
     enum class Range { G_2, G_4, G_6, G_8, G_16 };
@@ -36,5 +34,3 @@ public:
     
     static constexpr const char* get_name() { return "LSM303D_Accel"; }
 };
-
-} // namespace drone_project

@@ -3,8 +3,6 @@
 #include "task_wrapper.hpp"
 #include "drone_project/drivers/motor_driver.hpp"
 
-namespace drone_project {
-
 class MotorTask : public Task {
 private:
     MotorDriver m1_;
@@ -18,5 +16,3 @@ public:
 protected:
     void run() override;
 };
-
-} // namespace drone_project

@@ -5,8 +5,6 @@
 #include <cstdint>
 #include <array>
 
-namespace drone_project {
-
 class I2CDevice {
 public:
     enum class Result {
@@ -48,5 +46,3 @@ public:
     bool is_initialized() const { return initialized_; }
     uint8_t get_address() const { return device_address_; }
 };
-
-} // namespace drone_project

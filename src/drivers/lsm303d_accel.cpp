@@ -2,8 +2,6 @@
 #include <cstdio>
 #include <array>
 
-namespace drone_project {
-
 using namespace config;
 
 LSM303D_Accel::LSM303D_Accel(i2c_inst_t* i2c) 
@@ -114,5 +112,3 @@ AccelData LSM303D_Accel::read_accel() {
     
     return AccelData(linear_acceleration, to_ms_since_boot(get_absolute_time()));
 }
-
-} // namespace drone_project

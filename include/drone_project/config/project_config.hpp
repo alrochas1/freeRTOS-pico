@@ -7,8 +7,12 @@ namespace config {
 // Pins configuration
 namespace pins {
     constexpr uint8_t LED = PICO_DEFAULT_LED_PIN;
+    // TODO: Add USB pin
     constexpr uint8_t I2C_SDA = 26;
     constexpr uint8_t I2C_SCL = 27;
+    // TODO: Add motor pins configuration
+    // TODO: Add IR pins configuration
+    // TODO: Add RC pins configuration
 } // namespace pins
 
 // I2C configuration

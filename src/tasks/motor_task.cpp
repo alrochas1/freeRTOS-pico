@@ -1,8 +1,6 @@
 // motor_task.cpp
 #include "drone_project/tasks/motor_task.hpp"
 
-namespace drone_project {
-
 MotorTask::MotorTask(uint m1_pin, uint m2_pin, uint m3_pin, uint m4_pin)
     : Task("MOTOR", 256, 2), // TODO: Adjust stack size and priority
       m1_(m1_pin), m2_(m2_pin), m3_(m3_pin), m4_(m4_pin) {
@@ -33,5 +31,3 @@ void MotorTask::run() {
         vTaskDelayUntil(&last, period);
     }
 }
-
-} // namespace drone_project

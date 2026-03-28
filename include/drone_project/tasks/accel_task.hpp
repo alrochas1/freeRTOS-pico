@@ -9,8 +9,6 @@
 #include <drone_project/drivers/lsm303d_accel.hpp>
 
 
-namespace drone_project {
-
 class AccelTask : public I2CSensorTask {
 private:
     LSM303D_Accel accel_;
@@ -28,5 +26,3 @@ public:
     void run() override;
     
 };
-
-} // namespace drone_project

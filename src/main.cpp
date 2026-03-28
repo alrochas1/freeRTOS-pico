@@ -20,7 +20,6 @@
 
 #define CURRENT_MODE MODE_MOTOR_TEST
 
-using namespace drone_project;
 using namespace config;
 
 

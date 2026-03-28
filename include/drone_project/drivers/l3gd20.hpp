@@ -4,7 +4,6 @@
 #include <drone_project/types/sensor_data.hpp>
 #include "drone_project/config/project_config.hpp"
 
-namespace drone_project {
 
 class L3GD20 : public I2CDevice {
 public:
@@ -36,5 +35,3 @@ public:
     
     static constexpr const char* get_name() { return "L3GD20"; }
 };
-
-} // namespace drone_project

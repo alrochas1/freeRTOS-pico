@@ -3,8 +3,6 @@
 #include "drone_project/config/project_config.hpp"
 #include <cstdio>
 
-namespace drone_project {
-
 using namespace config;
 
 LedTask::LedTask() 
@@ -27,5 +25,3 @@ void LedTask::run() {
         delay(tasks::LED_BLINK_MS);
     }
 }
-
-} // namespace drone_project

@@ -2,8 +2,6 @@
 #include <cstdint>
 #include <cmath>
 
-namespace drone_project {
-
 struct Vector3f {
     float x{0.0f};
     float y{0.0f};
@@ -79,5 +77,3 @@ struct SensorData {
         return has_gyro() || has_accel() || has_mag();
     }
 };
-
-} // namespace drone_project

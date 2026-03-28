@@ -3,8 +3,6 @@
 #include <cstdio>
 #include <array>
 
-namespace drone_project {
-
 using namespace config;
 
 L3GD20::L3GD20(i2c_inst_t* i2c) 
@@ -112,5 +110,3 @@ GyroData L3GD20::read_gyro() {
     GyroData data(angular_velocity, to_ms_since_boot(get_absolute_time()));
     return data;
 }
-
-} // namespace drone_project

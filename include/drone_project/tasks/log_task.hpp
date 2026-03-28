@@ -10,8 +10,6 @@
 #include <drone_project/types/sensor_data.hpp>
 
 
-namespace drone_project {
-
 class LogTask : public Task {
 private:
     QueueHandle_t gyro_queue_;
@@ -24,5 +22,3 @@ public:
     void run() override;
 }; 
 
-
-} // namespace drone_project

@@ -6,8 +6,6 @@
 #include <set>
 #include <array>
 
-namespace drone_project {
-
 using namespace config;
 
 I2CDevice::I2CDevice(i2c_inst_t* i2c, uint8_t address) 
@@ -149,5 +147,3 @@ bool I2CDevice::verify_connection(uint8_t who_am_i_reg, uint8_t expected_id) {
     printf("[I2C] Device connected: WHO_AM_I = 0x%02X\n", who_am_i);
     return true;
 }
-
-} // namespace drone_project

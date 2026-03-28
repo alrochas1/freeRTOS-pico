@@ -6,8 +6,6 @@
 #include <drone_project/config/project_config.hpp>
 
 
-namespace drone_project {
-
 class LedTask : public Task {
 private:
     uint8_t led_pin;
@@ -20,5 +18,3 @@ public:
     LedTask();
 }; 
 
-
-} // namespace drone_project

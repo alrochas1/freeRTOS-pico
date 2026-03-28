@@ -3,8 +3,6 @@
 #include "drone_project/config/project_config.hpp"
 #include <cstdio>
 
-namespace drone_project {
-
 using namespace config;
 
 AccelTask::AccelTask(QueueHandle_t data_queue) 
@@ -52,5 +50,3 @@ void AccelTask::run() {
         delay(tasks::ACCEL_SAMPLE_MS);
     }
 }
-
-} // namespace drone_project

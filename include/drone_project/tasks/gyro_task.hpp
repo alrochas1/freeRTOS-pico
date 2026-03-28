@@ -9,8 +9,6 @@
 #include <drone_project/drivers/l3gd20.hpp>
 
 
-namespace drone_project {
-
 class GyroTask : public I2CSensorTask {
 private:
     L3GD20 gyro_;
@@ -28,5 +26,3 @@ public:
     void run() override;
     
 };
-
-} // namespace drone_project
