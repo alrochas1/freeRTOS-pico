@@ -45,7 +45,7 @@ public:
 class I2CSensorTask : public Task{
 protected:
     QueueHandle_t data_queue_;
-    bool initialized_{false};
+    // bool initialized_{false};
 
     // virtual bool initialize_sensor() = 0;
 

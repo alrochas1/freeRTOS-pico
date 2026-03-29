@@ -29,22 +29,25 @@ void LogTask::run() {
 
             // RC
             printf("[RC] Valid:%s T:%.2f R:%.2f P:%.2f Y:%.2f\n",
-                   snap.rc.valid ? "OK" : "FAIL",
-                   snap.rc.throttle,
-                   snap.rc.roll,
-                   snap.rc.pitch,
-                   snap.rc.yaw);
+                snap.rc.valid ? "OK" : "FAIL",
+                snap.rc.throttle,
+                snap.rc.roll,
+                snap.rc.pitch,
+                snap.rc.yaw);
 
             // IMU
-            printf("[GYRO] %.2f %.2f %.2f\n",
-                   snap.imu.gyro.angular_velocity.x,
-                   snap.imu.gyro.angular_velocity.y,
-                   snap.imu.gyro.angular_velocity.z);
+            printf("[GYRO] Valid:%s | %.2f %.2f %.2f\n",
+                snap.imu.has_gyro() ? "OK" : "FAIL",
+                snap.imu.gyro.angular_velocity.x,
+                snap.imu.gyro.angular_velocity.y,
+                snap.imu.gyro.angular_velocity.z);
 
-            printf("[ACCEL] %.2f %.2f %.2f\n",
-                   snap.imu.accel.linear_acceleration.x,
-                   snap.imu.accel.linear_acceleration.y,
-                   snap.imu.accel.linear_acceleration.z);
+            printf("[ACCEL] Valid:%s | %.2f %.2f %.2f\n",
+                snap.imu.has_accel() ? "OK" : "FAIL",
+                snap.imu.accel.linear_acceleration.x,
+                snap.imu.accel.linear_acceleration.y,
+                snap.imu.accel.linear_acceleration.z);
+
             printf("=======================\n");
         }
 

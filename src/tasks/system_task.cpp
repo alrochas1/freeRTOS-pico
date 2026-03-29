@@ -1,6 +1,8 @@
 // system_task.cpp
 #include "drone_project/tasks/system_task.hpp"
 
+#define SIM_BATTERY 0 // For testing without battery (USB mode). Be careful if the motors are connected!
+
 using namespace config;
 
 
@@ -32,6 +34,9 @@ void SystemStateTask::run() {
 
         // USB
         inputs.usb_connected = gpio_get(pins::USB_PIN);
+        #if SIM_BATTERY
+        inputs.usb_connected = false; // TESTING
+        #endif
 
         // IMU
         if (xQueueReceive(imu_queue, &imu, 0) == pdPASS) {
@@ -68,8 +73,10 @@ SystemState SystemStateTask::update_state(SystemState state, const SystemInputs&
         if (in.usb_connected)
             return SystemState::USB;
 
-        if (in.imu_ok)
+        if (in.imu_ok)  // Add a countdown
             return SystemState::DISARMED;
+
+        // Add if more than 30s  without imu, go to error
 
         return SystemState::INIT;
 
@@ -80,10 +87,10 @@ SystemState SystemStateTask::update_state(SystemState state, const SystemInputs&
         return SystemState::USB;
 
     case SystemState::DISARMED:
-        if (!in.imu_ok)
+        if (!in.imu_ok) // Add a countdown
             return SystemState::ERROR;
 
-        if (!in.rc_ok)
+        if (!in.rc_ok)  // Add a countdown
             return SystemState::FAILSAFE;
 
         if (in.arm_switch && in.throttle < 0.05f)
@@ -95,25 +102,25 @@ SystemState SystemStateTask::update_state(SystemState state, const SystemInputs&
         if (!in.rc_ok)
             return SystemState::FAILSAFE;
 
-        if (!in.imu_ok)
+        if (!in.imu_ok) // Add a countdown
             return SystemState::ERROR;
 
         if (in.throttle > 0.1f)
             return SystemState::FLIGHT;
 
-        if (!in.arm_switch)
+        if (!in.arm_switch) // Check
             return SystemState::DISARMED;
 
         return SystemState::ARMED;
 
     case SystemState::FLIGHT:
-        if (!in.rc_ok)
+        if (!in.rc_ok)  // Add a countdown
             return SystemState::FAILSAFE;
 
-        if (!in.imu_ok)
+        if (!in.imu_ok) // Add a countdown
             return SystemState::ERROR;
 
-        if (in.throttle < 0.05f)
+        if (in.throttle < 0.05f)    // Add a countdown
             return SystemState::ARMED;
 
         return SystemState::FLIGHT;

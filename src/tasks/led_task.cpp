@@ -5,6 +5,8 @@
 
 using namespace config;
 
+// TODO: Use this task for system status indication (e.g. error states, etc.)
+
 LedTask::LedTask() 
     : Task("LED", tasks::LED_STACK_SIZE, tasks::LED_PRIORITY)
     , led_pin(pins::LED) {

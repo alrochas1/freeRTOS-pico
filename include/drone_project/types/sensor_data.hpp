@@ -63,7 +63,7 @@ struct SensorData {
     AccelData accel; 
     // MagData mag; // TODO: Implement mag task (not used in drone_project)
 
-    uint32_t sequence_number{0};
+    uint32_t sequence_number{0};   // TODO: Check
     
     bool has_gyro() const { return gyro.valid; }
     bool has_accel() const { return accel.valid; }

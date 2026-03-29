@@ -32,8 +32,7 @@ bool IMUTask::initialize_gyro() {
 void IMUTask::process_gyro_data(SensorData *sensor_data) {
     auto gyro_data = gyro_.read_gyro();
 
-    sensor_data->gyro = gyro_data;
-    sensor_data->sequence_number++; // TODO: Change   
+    sensor_data->gyro = gyro_data; 
 }
 
 // ACCEL ----
@@ -54,8 +53,7 @@ bool IMUTask::initialize_accel() {
 void IMUTask::process_accel_data(SensorData *sensor_data) {
     auto accel_data = accel_.read_accel();
 
-    sensor_data->accel = accel_data;
-    sensor_data->sequence_number++;  // TODO: Change   
+    sensor_data->accel = accel_data;   
 }
 
 // -------
@@ -70,12 +68,14 @@ void IMUTask::run() {
     if (!initialize_accel()) {
         printf("[IMU] WARNING: Accelerometer starting in degraded mode\n");
     }
-
-    SensorData sensor_data;
     
     while (true) {
+        SensorData sensor_data{};  // reset
+
         process_gyro_data(&sensor_data);
         process_accel_data(&sensor_data);
+
+        sensor_data.sequence_number++;  // TODO: Change
 
         // TODO: Add error handling
         xQueueSend(data_queue_, &sensor_data, 0);

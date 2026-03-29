@@ -20,7 +20,7 @@
 
 // Sim tasks (for testing without hardware)
 #include "drone_project/tasks/sim/rc_sim_task.hpp"
-// #include "drone_project/tasks/sim/imu_sim_task.hpp" --- TODO ---
+#include "drone_project/tasks/sim/imu_sim_task.hpp"
 
 
 using namespace config;
@@ -84,7 +84,7 @@ int start_tasks(bool success) {
 int drone_main() {
 
     // For testing individual tasks without the full setup
-    RunMode running_mode = RunMode::RC_SIM;
+    RunMode running_mode = RunMode::SIMULATION;
     
     common_main();
 
@@ -99,12 +99,13 @@ int drone_main() {
     LogTask log_task(queues.snapshot_queue);
 
     // Imput tasks (TODO: Improve this)
-    /*if (running_mode == RunMode::IMU_SIM || running_mode == RunMode::SIMULATION) {
-        // IMUSimTask imu_task(queues.imu_queue);
+    Task* imu_task = nullptr;
+    if (running_mode == RunMode::IMU_SIM || running_mode == RunMode::SIMULATION) {
+        imu_task = new IMUSimTask(queues.imu_queue);
     } 
-    else {*/
-        IMUTask imu_task(queues.imu_queue);
-    // }   
+    else {
+        imu_task = new IMUTask(queues.imu_queue);
+    }   
 
     Task* rc_task = nullptr;
     if (running_mode == RunMode::RC_SIM || running_mode == RunMode::SIMULATION) {
@@ -122,7 +123,7 @@ int drone_main() {
     bool success = led_task.start() && 
                    log_task.start() &&
                    system_state_task.start() &&
-                   imu_task.start() &&
+                   imu_task->start() &&
                    rc_task->start() &&
                    motor_task.start();
     return start_tasks(success);
