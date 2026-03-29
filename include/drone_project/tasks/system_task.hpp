@@ -12,16 +12,14 @@ private:
 
     SystemState update_state(SystemState state, const SystemInputs& in);
 
-    QueueHandle_t gyro_queue_;
-    QueueHandle_t accel_queue_;
+    QueueHandle_t imu_queue;
     QueueHandle_t rc_queue_;
     QueueHandle_t state_queue_;
 
     SystemState state_;
 
 public:
-    SystemStateTask(QueueHandle_t gyro_q,
-                    QueueHandle_t accel_q,
+    SystemStateTask(QueueHandle_t imu_q,
                     QueueHandle_t rc_q,
                     QueueHandle_t state_q);
 

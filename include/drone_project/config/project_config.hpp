@@ -45,8 +45,7 @@ namespace tasks {
     constexpr uint32_t SYSTEM_STACK_SIZE    = 256;
     constexpr uint32_t LED_STACK_SIZE       = 256;
     constexpr uint32_t LOG_STACK_SIZE       = 1024;
-    constexpr uint32_t GYRO_STACK_SIZE      = 1024;
-    constexpr uint32_t ACCEL_STACK_SIZE     = 1024;
+    constexpr uint32_t IMU_STACK_SIZE       = 1024;
     constexpr uint32_t IR_STACK_SIZE        = 1024;
     constexpr uint32_t RC_STACK_SIZE        = 1024;
     constexpr uint32_t MOTOR_STACK_SIZE     = 1024;
@@ -55,8 +54,7 @@ namespace tasks {
     constexpr uint8_t SYSTEM_PRIORITY   = 1;
     constexpr uint8_t LED_PRIORITY      = 1;
     constexpr uint8_t LOG_PRIORITY      = 1;
-    constexpr uint8_t GYRO_PRIORITY     = 2;
-    constexpr uint8_t ACCEL_PRIORITY    = 2;
+    constexpr uint8_t IMU_PRIORITY      = 2;
     constexpr uint8_t IR_PRIORITY       = 2;
     constexpr uint8_t RC_PRIORITY       = 2;
     constexpr uint8_t MOTOR_PRIORITY    = 2;
@@ -65,10 +63,10 @@ namespace tasks {
     constexpr uint32_t SYSTEM_UPDATE_MS = 50;   // 20 Hz
     constexpr uint32_t LED_BLINK_MS     = 500;  //  2 Hz
     constexpr uint32_t LOG_PRINT_MS     = 500;  //  2 Hz
-    constexpr uint32_t GYRO_SAMPLE_MS   = 100;  // 10 Hz
-    constexpr uint32_t ACCEL_SAMPLE_MS  = 100;  // 10 Hz
+    constexpr uint32_t IMU_SAMPLE_MS    = 10;   // 100 Hz
     constexpr uint32_t IR_UPDATE_MS     = 20;   // 50 Hz
     constexpr uint32_t RC_UPDATE_MS     = 20;   // 50 Hz
+    constexpr uint32_t MOTOR_UPDATE_MS  = 10;   // 100 Hz
 
     // TODO: Add motor task configuration
     // TODO: Add rc task configuration

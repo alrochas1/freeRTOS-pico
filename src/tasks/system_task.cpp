@@ -4,13 +4,11 @@
 using namespace config;
 
 
-SystemStateTask::SystemStateTask(QueueHandle_t gyro_q,
-                             QueueHandle_t accel_q,
+SystemStateTask::SystemStateTask(QueueHandle_t imu_q,
                              QueueHandle_t rc_q,
                              QueueHandle_t state_q)
     : Task("STATE", 512, 3),
-      gyro_queue_(gyro_q),
-      accel_queue_(accel_q),
+      imu_queue(imu_q),
       rc_queue_(rc_q),
       state_queue_(state_q),
       state_(SystemState::INIT) 
@@ -26,9 +24,6 @@ void SystemStateTask::run() {
     RCCommand rc{};
     SystemSnapshot snap{};
 
-    TickType_t last_log = xTaskGetTickCount();
-    const TickType_t log_period = pdMS_TO_TICKS(tasks::SYSTEM_UPDATE_MS);
-
     printf("[SYSTEM STATE] Task started - Update interval: %lu ms\n", tasks::SYSTEM_UPDATE_MS);
 
     while (true) {
@@ -39,8 +34,8 @@ void SystemStateTask::run() {
         inputs.usb_connected = gpio_get(pins::USB_PIN);
 
         // IMU
-        if (xQueueReceive(gyro_queue_, &imu, 0) == pdPASS) {
-            inputs.imu_ok = imu.has_gyro(); // placeholder
+        if (xQueueReceive(imu_queue, &imu, 0) == pdPASS) {
+            inputs.imu_ok = imu.has_gyro() && imu.has_accel(); // Add mag if needed
             snap.imu = imu;
         }
 
@@ -60,7 +55,7 @@ void SystemStateTask::run() {
 
         xQueueOverwrite(state_queue_, &snap);
 
-        vTaskDelayUntil(&last_log, log_period);
+        delay(tasks::SYSTEM_UPDATE_MS);
     }
 }
 

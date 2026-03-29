@@ -30,9 +30,6 @@ void RCSimTask::sim() {
 
 void RCSimTask::run() {
 
-    TickType_t last = xTaskGetTickCount();
-    const TickType_t period = pdMS_TO_TICKS(tasks::RC_UPDATE_MS);
-
     printf("[RCSim] Task started\n");
 
     while (true) {
@@ -41,6 +38,6 @@ void RCSimTask::run() {
 
         xQueueOverwrite(rc_queue_, &last_cmd_);
 
-        vTaskDelayUntil(&last, period);
+        delay(tasks::RC_UPDATE_MS);
     }
 }

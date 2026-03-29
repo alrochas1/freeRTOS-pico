@@ -13,15 +13,14 @@
 #include "drone_project/tasks/led_task.hpp"
 #include "drone_project/tasks/log_task.hpp"
 
-#include "drone_project/tasks/gyro_task.hpp"
-#include "drone_project/tasks/accel_task.hpp"
+#include "drone_project/tasks/imu_task.hpp"
 //#include "drone_project/tasks/ir_task.hpp"
 
 #include "drone_project/tasks/motor_task.hpp"
 
 // Sim tasks (for testing without hardware)
 #include "drone_project/tasks/sim/rc_sim_task.hpp"
-// #include "drone_project/tasks/sim/gyro_sim_task.hpp" --- TODO ---
+// #include "drone_project/tasks/sim/imu_sim_task.hpp" --- TODO ---
 
 
 using namespace config;
@@ -35,15 +34,13 @@ SystemQueues create_queues() {
 
     // Imput Queues
     queues.rc_queue     = xQueueCreate(queues::SYSTEM_QUEUE_LENGTH, sizeof(RCCommand));
-    queues.gyro_queue   = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
-    queues.accel_queue  = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
+    queues.imu_queue    = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
     //queues.mag_queue    = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
 
     // Add error handling for queue creation
     if (!queues.snapshot_queue ||
         !queues.rc_queue ||
-        !queues.gyro_queue ||
-        !queues.accel_queue) {
+        !queues.imu_queue) {
     printf("QUEUE INIT FAILED\n");
     while(true);
 }
@@ -97,18 +94,16 @@ int drone_main() {
 
 
     // Create tasks (TODO: Add structure)
-    SystemStateTask system_state_task(queues.gyro_queue, queues.accel_queue, queues.rc_queue, queues.snapshot_queue);
+    SystemStateTask system_state_task(queues.imu_queue, queues.rc_queue, queues.snapshot_queue);
     LedTask led_task;
     LogTask log_task(queues.snapshot_queue);
 
     // Imput tasks (TODO: Improve this)
     /*if (running_mode == RunMode::IMU_SIM || running_mode == RunMode::SIMULATION) {
-        // GyroSimTask gyro_task(queues.gyro_queue);
-        // AccelSimTask accel_task(queues.accel_queue);
+        // IMUSimTask imu_task(queues.imu_queue);
     } 
     else {*/
-        GyroTask gyro_task(queues.gyro_queue);
-        AccelTask accel_task(queues.accel_queue);
+        IMUTask imu_task(queues.imu_queue);
     // }   
 
     Task* rc_task = nullptr;
@@ -127,8 +122,7 @@ int drone_main() {
     bool success = led_task.start() && 
                    log_task.start() &&
                    system_state_task.start() &&
-                   gyro_task.start() &&
-                   accel_task.start() &&
+                   imu_task.start() &&
                    rc_task->start() &&
                    motor_task.start();
     return start_tasks(success);

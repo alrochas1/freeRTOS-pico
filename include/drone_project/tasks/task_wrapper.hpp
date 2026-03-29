@@ -47,7 +47,7 @@ protected:
     QueueHandle_t data_queue_;
     bool initialized_{false};
 
-    virtual bool initialize_sensor() = 0;
+    // virtual bool initialize_sensor() = 0;
 
 public:
     I2CSensorTask(const std::string& name, uint32_t stack_size, UBaseType_t priority, QueueHandle_t data_queue)

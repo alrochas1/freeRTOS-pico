@@ -16,9 +16,6 @@ void LogTask::run() {
 
     SystemSnapshot snap;
 
-    TickType_t last = xTaskGetTickCount();
-    const TickType_t period = pdMS_TO_TICKS(tasks::LOG_PRINT_MS); // 2 Hz logging
-
     while (true) {
 
         if (xQueueReceive(snapshot_queue_, &snap, 0) == pdPASS) {
@@ -48,9 +45,10 @@ void LogTask::run() {
                    snap.imu.accel.linear_acceleration.x,
                    snap.imu.accel.linear_acceleration.y,
                    snap.imu.accel.linear_acceleration.z);
+            printf("=======================\n");
         }
 
-        vTaskDelayUntil(&last, period);
+        delay(tasks::LOG_PRINT_MS);  // 2 Hz logging
     }
 }
 
