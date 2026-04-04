@@ -55,7 +55,7 @@ void SystemStateTask::run() {
         }
 
         // FSM
-        state_ = update_state(state_, inputs);
+        update_state(&state_, inputs);
         snap.state = state_;
 
         xQueueOverwrite(state_queue_, &snap);
@@ -65,77 +65,77 @@ void SystemStateTask::run() {
 }
 
 
-SystemState SystemStateTask::update_state(SystemState state, const SystemInputs& in) {
+void SystemStateTask::update_state(SystemState* state, const SystemInputs& in) {
 
-    switch (state) {
+    switch (*state) {
 
     case SystemState::INIT:
         if (in.usb_connected)
-            return SystemState::USB;
+            *state = SystemState::USB;
 
         if (in.imu_ok)  // Add a countdown
-            return SystemState::DISARMED;
+            *state = SystemState::DISARMED;
 
         // Add if more than 30s  without imu, go to error
 
-        return SystemState::INIT;
+        *state = SystemState::INIT;
 
     case SystemState::USB:
         if (!in.usb_connected && in.imu_ok)
-            return SystemState::DISARMED;
+            *state = SystemState::DISARMED;
 
-        return SystemState::USB;
+        *state = SystemState::USB;
 
     case SystemState::DISARMED:
         if (!in.imu_ok) // Add a countdown
-            return SystemState::ERROR;
+            *state = SystemState::ERROR;
 
         if (!in.rc_ok)  // Add a countdown
-            return SystemState::FAILSAFE;
+            *state = SystemState::FAILSAFE;
 
         if (in.arm_switch && in.throttle < 0.05f)
-            return SystemState::ARMED;
+            *state = SystemState::ARMED;
 
-        return SystemState::DISARMED;
+        *state = SystemState::DISARMED;
 
     case SystemState::ARMED:
         if (!in.rc_ok)
-            return SystemState::FAILSAFE;
+            *state = SystemState::FAILSAFE;
 
         if (!in.imu_ok) // Add a countdown
-            return SystemState::ERROR;
+            *state = SystemState::ERROR;
 
         if (in.throttle > 0.1f)
-            return SystemState::FLIGHT;
+            *state = SystemState::FLIGHT;
 
         if (!in.arm_switch) // Check
-            return SystemState::DISARMED;
+            *state = SystemState::DISARMED;
 
-        return SystemState::ARMED;
+        *state = SystemState::ARMED;
 
     case SystemState::FLIGHT:
         if (!in.rc_ok)  // Add a countdown
-            return SystemState::FAILSAFE;
+            *state = SystemState::FAILSAFE;
 
         if (!in.imu_ok) // Add a countdown
-            return SystemState::ERROR;
+            *state = SystemState::ERROR;
 
         if (in.throttle < 0.05f)    // Add a countdown
-            return SystemState::ARMED;
+            *state = SystemState::ARMED;
 
-        return SystemState::FLIGHT;
+        *state = SystemState::FLIGHT;
 
     case SystemState::FAILSAFE:
         if (in.rc_ok && in.imu_ok)
-            return SystemState::DISARMED;
+            *state = SystemState::DISARMED;
 
-        return SystemState::FAILSAFE;
+        *state = SystemState::FAILSAFE;
 
     case SystemState::ERROR:
         // only manual reset
-        return SystemState::ERROR;
+        *state = SystemState::ERROR;
     }
 
-    return SystemState::ERROR;
+    *state = SystemState::ERROR;
 }
 

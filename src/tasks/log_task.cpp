@@ -6,7 +6,7 @@
 using namespace config;
 
 LogTask::LogTask(QueueHandle_t snapshot_queue)
-    : Task("LOG", 512, 1),
+    : Task("LOG", tasks::LOG_STACK_SIZE, tasks::LOG_PRIORITY),
       snapshot_queue_(snapshot_queue) {
 
     printf("[LOG] Task created\n");

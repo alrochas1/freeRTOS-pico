@@ -3,9 +3,12 @@
 
 using namespace config;
 
-MotorTask::MotorTask(uint m1_pin, uint m2_pin, uint m3_pin, uint m4_pin)
-    : Task("MOTOR", 256, 2), // TODO: Adjust stack size and priority
-      m1_(m1_pin), m2_(m2_pin), m3_(m3_pin), m4_(m4_pin) {
+MotorTask::MotorTask()
+    : Task("MOTOR", tasks::MOTOR_STACK_SIZE, tasks::MOTOR_PRIORITY),
+      m1_(pins::M1_PIN),
+      m2_(pins::M2_PIN),
+      m3_(pins::M3_PIN),
+      m4_(pins::M4_PIN) {
 
     m1_.init();
     m2_.init();

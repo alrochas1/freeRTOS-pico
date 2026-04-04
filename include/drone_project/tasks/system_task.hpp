@@ -10,7 +10,7 @@ using namespace config;
 class SystemStateTask : public Task {
 private:
 
-    SystemState update_state(SystemState state, const SystemInputs& in);
+    void update_state(SystemState* state, const SystemInputs& in);
 
     QueueHandle_t imu_queue;
     QueueHandle_t rc_queue_;

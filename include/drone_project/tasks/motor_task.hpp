@@ -12,7 +12,7 @@ private:
     MotorDriver m4_;
 
 public:
-    MotorTask(uint m1_pin, uint m2_pin, uint m3_pin, uint m4_pin);
+    MotorTask();
 
 protected:
     void run() override;

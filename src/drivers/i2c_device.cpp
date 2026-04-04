@@ -17,7 +17,7 @@ I2CDevice::I2CDevice(i2c_inst_t* i2c, uint8_t address)
     static std::set<i2c_inst_t*> initialized_ports;
     if (initialized_ports.find(i2c_port_) == initialized_ports.end()) {
         i2c_init(i2c_port_, i2c::BAUD_RATE);
-        gpio_set_function(pins::I2C_SDA, GPIO_FUNC_I2C);
+        gpio_set_function(pins::I2C_SDA, GPIO_FUNC_I2C);    // TODO: Move pin declaration
         gpio_set_function(pins::I2C_SCL, GPIO_FUNC_I2C);
         gpio_pull_up(pins::I2C_SDA);
         gpio_pull_up(pins::I2C_SCL);

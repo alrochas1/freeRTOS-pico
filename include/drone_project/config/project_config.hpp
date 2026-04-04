@@ -10,7 +10,11 @@ namespace pins {
     constexpr uint8_t USB_PIN = 24; // USB detection pin
     constexpr uint8_t I2C_SDA = 26;
     constexpr uint8_t I2C_SCL = 27;
-    // TODO: Add motor pins configuration
+    constexpr uint8_t M1_PIN = 2;
+    constexpr uint8_t M2_PIN = 3;
+    constexpr uint8_t M3_PIN = 4;
+    constexpr uint8_t M4_PIN = 5;
+    // TODO: update motor pins configuration
     // TODO: Add IR pins configuration
     // TODO: Add RC pins configuration
 } // namespace pins
@@ -48,28 +52,28 @@ namespace tasks {
     constexpr uint32_t IMU_STACK_SIZE       = 1024;
     constexpr uint32_t IR_STACK_SIZE        = 1024;
     constexpr uint32_t RC_STACK_SIZE        = 1024;
+    constexpr uint32_t CONTROL_STACK_SIZE   = 1024;
     constexpr uint32_t MOTOR_STACK_SIZE     = 1024;
     
     
     constexpr uint8_t SYSTEM_PRIORITY   = 1;
     constexpr uint8_t LED_PRIORITY      = 1;
     constexpr uint8_t LOG_PRIORITY      = 1;
-    constexpr uint8_t IMU_PRIORITY      = 2;
+    constexpr uint8_t IMU_PRIORITY      = 3;
     constexpr uint8_t IR_PRIORITY       = 2;
     constexpr uint8_t RC_PRIORITY       = 2;
-    constexpr uint8_t MOTOR_PRIORITY    = 2;
+    constexpr uint8_t CONTROL_PRIORITY  = 4;
+    constexpr uint8_t MOTOR_PRIORITY    = 3;
 
 
-    constexpr uint32_t SYSTEM_UPDATE_MS = 50;   // 20 Hz
-    constexpr uint32_t LED_BLINK_MS     = 500;  //  2 Hz
-    constexpr uint32_t LOG_PRINT_MS     = 500;  //  2 Hz
-    constexpr uint32_t IMU_SAMPLE_MS    = 10;   // 100 Hz
-    constexpr uint32_t IR_UPDATE_MS     = 20;   // 50 Hz
-    constexpr uint32_t RC_UPDATE_MS     = 20;   // 50 Hz
-    constexpr uint32_t MOTOR_UPDATE_MS  = 10;   // 100 Hz
-
-    // TODO: Add motor task configuration
-    // TODO: Add rc task configuration
+    constexpr uint32_t SYSTEM_UPDATE_MS     = 50;   // 20 Hz
+    constexpr uint32_t LED_BLINK_MS         = 500;  // 2 Hz
+    constexpr uint32_t LOG_PRINT_MS         = 500;  // 2 Hz
+    constexpr uint32_t IMU_SAMPLE_MS        = 5;    // 200 Hz
+    constexpr uint32_t IR_UPDATE_MS         = 20;   // 50 Hz
+    constexpr uint32_t RC_UPDATE_MS         = 20;   // 50 Hz
+    constexpr uint32_t CONTROL_UPDATE_MS    = 5;    // 200 Hz
+    constexpr uint32_t MOTOR_UPDATE_MS      = 5;    // 200 Hz
 } // namespace tasks
 
 // Queue configuration

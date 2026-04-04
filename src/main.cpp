@@ -17,6 +17,7 @@
 //#include "drone_project/tasks/ir_task.hpp"
 
 #include "drone_project/tasks/motor_task.hpp"
+#include "drone_project/tasks/control_task.hpp"
 
 // Sim tasks (for testing without hardware)
 #include "drone_project/tasks/sim/rc_sim_task.hpp"
@@ -35,12 +36,15 @@ SystemQueues create_queues() {
     // Imput Queues
     queues.rc_queue     = xQueueCreate(queues::SYSTEM_QUEUE_LENGTH, sizeof(RCCommand));
     queues.imu_queue    = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
-    //queues.mag_queue    = xQueueCreate(queues::SENSOR_QUEUE_LENGTH, sizeof(SensorData));
+    
+    // Control output queue
+    queues.motor_queue  = xQueueCreate(queues::SYSTEM_QUEUE_LENGTH, sizeof(MotorCommands));
 
     // Add error handling for queue creation
     if (!queues.snapshot_queue ||
         !queues.rc_queue ||
-        !queues.imu_queue) {
+        !queues.imu_queue ||
+        !queues.motor_queue) {
     printf("QUEUE INIT FAILED\n");
     while(true);
 }
@@ -114,8 +118,9 @@ int drone_main() {
         rc_task = new IRTask(16, queues.rc_queue);
     }*/
 
-    // ControlTask control_task(queues.rc_queue, queues.gyro_queue, queues.accel_queue, queues.motor_queue);
-    MotorTask motor_task(4, 5, 6, 7); // Example GPIOs;
+    // Control task
+    ControlTask control_task(queues.snapshot_queue, queues.motor_queue);
+    MotorTask motor_task;
 
 
     // TODO: Implement
@@ -125,6 +130,7 @@ int drone_main() {
                    system_state_task.start() &&
                    imu_task->start() &&
                    rc_task->start() &&
+                   control_task.start() &&
                    motor_task.start();
     return start_tasks(success);
 }
