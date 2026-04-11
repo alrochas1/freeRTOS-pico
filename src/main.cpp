@@ -99,8 +99,8 @@ int drone_main() {
 
     // Create tasks (TODO: Add structure)
     SystemStateTask system_state_task(queues.imu_queue, queues.rc_queue, queues.snapshot_queue);
-    LedTask led_task;
-    LogTask log_task(queues.snapshot_queue);
+    LedTask led_task(queues.snapshot_queue);
+    LogTask log_task(queues.snapshot_queue, queues.motor_queue);
 
     // Imput tasks (TODO: Improve this)
     Task* imu_task = nullptr;
@@ -114,13 +114,13 @@ int drone_main() {
     Task* rc_task = nullptr;
     if (running_mode == RunMode::RC_SIM || running_mode == RunMode::SIMULATION) {
         rc_task = new RCSimTask(queues.rc_queue);
-    } /*else {
-        rc_task = new IRTask(16, queues.rc_queue);
-    }*/
+    } else {
+        // rc_task = new IRTask(pins::IR_PIN, queues.rc_queue);
+    }
 
     // Control task
     ControlTask control_task(queues.snapshot_queue, queues.motor_queue);
-    MotorTask motor_task;
+    MotorTask motor_task(queues.motor_queue);
 
 
     // TODO: Implement

@@ -10,6 +10,7 @@ namespace pins {
     constexpr uint8_t USB_PIN = 24; // USB detection pin
     constexpr uint8_t I2C_SDA = 26;
     constexpr uint8_t I2C_SCL = 27;
+    constexpr uint8_t IR_PIN = 16;
     constexpr uint8_t M1_PIN = 2;
     constexpr uint8_t M2_PIN = 3;
     constexpr uint8_t M3_PIN = 4;
@@ -74,6 +75,18 @@ namespace tasks {
     constexpr uint32_t RC_UPDATE_MS         = 20;   // 50 Hz
     constexpr uint32_t CONTROL_UPDATE_MS    = 5;    // 200 Hz
     constexpr uint32_t MOTOR_UPDATE_MS      = 5;    // 200 Hz
+
+
+    // Timeout constants for state machine countdowns
+    constexpr uint32_t IMU_TIMEOUT_MS           = 2000;  // 2 seconds
+    constexpr uint32_t RC_TIMEOUT_MS            = 1000;  // 1 second
+    constexpr uint32_t INIT_TIMEOUT_MS          = 5000;  // 5 seconds
+    constexpr uint32_t THROTTLE_LOW_TIMEOUT_MS  = 2000;  // 2 seconds
+
+    constexpr uint32_t IMU_COUNTDOWN            = IMU_TIMEOUT_MS/SYSTEM_UPDATE_MS;
+    constexpr uint32_t RC_COUNTDOWN             = RC_TIMEOUT_MS/SYSTEM_UPDATE_MS;
+    constexpr uint32_t INIT_COUNTDOWN           = INIT_TIMEOUT_MS/SYSTEM_UPDATE_MS;
+    constexpr uint32_t THROTTLE_LOW_COUNTDOWN   = THROTTLE_LOW_TIMEOUT_MS/SYSTEM_UPDATE_MS;
 } // namespace tasks
 
 // Queue configuration

@@ -3,6 +3,7 @@
 #include "task_wrapper.hpp"
 #include "drone_project/drivers/motor_driver.hpp"
 #include "drone_project/config/project_config.hpp"
+#include "drone_project/types/control_data.hpp"
 
 class MotorTask : public Task {
 private:
@@ -11,8 +12,10 @@ private:
     MotorDriver m3_;
     MotorDriver m4_;
 
+    QueueHandle_t motor_queue_;
+
 public:
-    MotorTask();
+    MotorTask(QueueHandle_t motor_queue);
 
 protected:
     void run() override;

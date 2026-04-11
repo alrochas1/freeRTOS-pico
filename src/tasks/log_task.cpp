@@ -5,9 +5,10 @@
 
 using namespace config;
 
-LogTask::LogTask(QueueHandle_t snapshot_queue)
+LogTask::LogTask(QueueHandle_t snapshot_queue, QueueHandle_t motor_queue)
     : Task("LOG", tasks::LOG_STACK_SIZE, tasks::LOG_PRIORITY),
-      snapshot_queue_(snapshot_queue) {
+      snapshot_queue_(snapshot_queue),
+      motor_queue_(motor_queue) {
 
     printf("[LOG] Task created\n");
 }
@@ -18,9 +19,8 @@ void LogTask::run() {
 
     while (true) {
 
-        if (xQueueReceive(snapshot_queue_, &snap, 0) == pdPASS) {
-
-            printf("\n=== SYSTEM SNAPSHOT ===\n");
+        printf("\n=== SYSTEM SNAPSHOT ===\n");
+        if (xQueuePeek(snapshot_queue_, &snap, 0) == pdPASS) {
 
             printf("[TS] %lu ms\n", snap.timestamp_ms);
 
@@ -47,10 +47,17 @@ void LogTask::run() {
                 snap.imu.accel.linear_acceleration.x,
                 snap.imu.accel.linear_acceleration.y,
                 snap.imu.accel.linear_acceleration.z);
-
-            printf("=======================\n");
         }
 
+        // Log motor commands
+        MotorCommands motor_cmds;
+        if (xQueuePeek(motor_queue_, &motor_cmds, 0) == pdPASS) {
+            printf("[MOTORS] M1=%u M2=%u M3=%u M4=%u\n",
+                motor_cmds.m1, motor_cmds.m2, motor_cmds.m3, motor_cmds.m4);
+        }
+
+        printf("=======================\n");
+        
         delay(tasks::LOG_PRINT_MS);  // 2 Hz logging
     }
 }

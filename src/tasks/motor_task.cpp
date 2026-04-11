@@ -3,12 +3,13 @@
 
 using namespace config;
 
-MotorTask::MotorTask()
+MotorTask::MotorTask(QueueHandle_t motor_queue)
     : Task("MOTOR", tasks::MOTOR_STACK_SIZE, tasks::MOTOR_PRIORITY),
-      m1_(pins::M1_PIN),
-      m2_(pins::M2_PIN),
-      m3_(pins::M3_PIN),
-      m4_(pins::M4_PIN) {
+    motor_queue_(motor_queue),
+    m1_(pins::M1_PIN),
+    m2_(pins::M2_PIN),
+    m3_(pins::M3_PIN),
+    m4_(pins::M4_PIN) {
 
     m1_.init();
     m2_.init();
@@ -19,18 +20,18 @@ MotorTask::MotorTask()
 }
 
 void MotorTask::run() {
-    // TODO: First test. Change this and change all magic numbers
-    const uint16_t m1_power = 750;
-    const uint16_t m2_power = 0;
-    const uint16_t m3_power = 0;
-    const uint16_t m4_power = 0;
+    MotorCommands commands{};
 
-    // TODO: Change this to use a queue or something to get the power values from the control task
+    printf("[MOTOR] Task started - Update interval: %lu ms\n", tasks::MOTOR_UPDATE_MS);
+
     while (true) {
-        m1_.set_power(m1_power);
-        m2_.set_power(m2_power);
-        m3_.set_power(m3_power);
-        m4_.set_power(m4_power);
+        // Read motor commands from queue
+        if (xQueuePeek(motor_queue_, &commands, 0) == pdPASS) {
+            m1_.set_power(commands.m1);
+            m2_.set_power(commands.m2);
+            m3_.set_power(commands.m3);
+            m4_.set_power(commands.m4);
+        }
 
         delay(tasks::MOTOR_UPDATE_MS);
     }

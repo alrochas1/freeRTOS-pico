@@ -19,19 +19,14 @@ struct SystemInputs {
     bool rc_ok;
 
     float throttle;
-    bool arm_switch;   // TODO: Check
 };
 
 enum class RunMode {
     FLIGHT,
-    IMU_SIM,    // TODO: Implement IMU sim
+    IMU_SIM,
     RC_SIM,
-    SIMULATION  // TODO: Implement full sim (IMU + RC)
+    SIMULATION
 };
-
-// struct SystemConfig {
-//     RunMode mode;
-// };
 
 
 struct SystemQueues {
@@ -43,6 +38,7 @@ struct SystemQueues {
     QueueHandle_t rc_queue;
     QueueHandle_t imu_queue;
         
+    // Output Queues
     QueueHandle_t motor_queue;
 };
 

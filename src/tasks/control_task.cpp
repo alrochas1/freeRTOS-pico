@@ -36,9 +36,9 @@ MotorCommands ControlTask::get_motor_commands(const Inclination& current_state,
         commands.m4 = 0;
         return commands; // Motors off if not armed or in flight
     }
-    else{
-        get_pid_commands(current_state, state.rc);
-    }
+    
+    // Get PID commands from control logic
+    commands = get_pid_commands(current_state, state.rc);
     
     return commands;
 }
@@ -50,11 +50,12 @@ MotorCommands ControlTask::get_pid_commands(const Inclination& current_state, co
     // Placeholder
     if(desired_state.throttle > 0.1f) {
         commands.m1 = static_cast<uint16_t>(1023*0.3); // Example: 30% throttle
+        commands.m3 = static_cast<uint16_t>(1023*0.3); // Example: 30% throttle
     } else {
         commands.m1 = 0; // Motors off
+        commands.m3 = 0; // Motors off
     }
     commands.m2 = 0;  // Placeholder
-    commands.m3 = 0;  // Placeholder
     commands.m4 = 0;  // Placeholder
     
     return commands;
@@ -67,7 +68,7 @@ void ControlTask::run() {
     printf("[CONTROL] Task started - Update interval: %lu ms\n", tasks::CONTROL_UPDATE_MS);
     
     while (true) {
-        if (xQueueReceive(snapshot_queue_, &snapshot, 0) == pdPASS) {
+        if (xQueuePeek(snapshot_queue_, &snapshot, 0) == pdPASS) {
             
             // Estimate the drone's inclination state from IMU data
             Inclination current_state = estimate_state(snapshot.imu);
@@ -76,7 +77,7 @@ void ControlTask::run() {
             motor_commands = get_motor_commands(current_state, snapshot);
             
             // Send motor commands to the motor task
-            xQueueSend(motor_queue_, &motor_commands, 0);
+            xQueueOverwrite(motor_queue_, &motor_commands);
         }
         
         delay(tasks::CONTROL_UPDATE_MS);

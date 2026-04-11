@@ -1,5 +1,4 @@
-// motor_driver.cpp --> This is for controlling a motor using a DRV8833. 
-// It only uses one direction (the drone doesnt need to reverse)
+// motor_driver.cpp --> This is for controlling a motor using a custom driver (SI2300 + 1N4148). 
 #include "drone_project/drivers/motor_driver.hpp"
 
 MotorDriver::MotorDriver(uint pwm_pin) 
@@ -15,6 +14,7 @@ void MotorDriver::init() {
     pwm_config_set_clkdiv(&config, 6.25f);          // 125MHz / 6.25 = 20 MHz
     pwm_config_set_wrap(&config, 1000);             // 20 MHz / 1000 = 20 kHz
     pwm_init(slice_num_, &config, true);            // start enabled
+    set_power(0);                                   // Start with motors off
 }
 
 void MotorDriver::set_power(uint16_t value) {
