@@ -15,10 +15,11 @@ All notable changes to this project will be documented in this file.
 - Centralized configuration management
 
 #### Hardware Drivers
+- Raspberry Pi Pico (RP2040)
 - I2C device abstraction layer with error handling
 - L3GD20 3-axis gyroscope driver
 - LSM303D 3-axis accelerometer driver
-- Motor driver with PWM support (4 motor channels)
+- Motor driver with PWM support (4 motor channels, tested with a 8520 motor and custom drivers)
 - USB detection support
 
 #### System Tasks
@@ -36,14 +37,6 @@ All notable changes to this project will be documented in this file.
 - README.md with compilation and flashing instructions
 - Inline code documentation and comments
 
-
-### Technical Specifications
-
-#### Supported Hardware
-- Raspberry Pi Pico (RP2040)
-- L3GD20 Gyroscope (I2C address: 0x69)
-- LSM303D Accelerometer (I2C address: 0x1E)
-- Generic DC Motors (4 channels PWM support, tested with a 8520 motor and custom drivers)
 
 ### Known Limitations
 
